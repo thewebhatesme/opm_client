@@ -1,6 +1,6 @@
 <?php
 namespace Whm\Opm\Client\Command;
-use Symfony\Component\Yaml\Yaml;
+
 use Whm\Opm\Client\Config\Config;
 use Buzz\Browser;
 use Whm\Opm\Client\Browser\Phantom;
@@ -29,7 +29,9 @@ class ProcessUrl extends Command
     $httpArchive = $phantom->createHttpArchive($input->getArgument('url'));
 
     $buzz = new Browser();
-    $response = $buzz->post($config->getOpmServer() . "/add/" . $config->getClientId() . "/" . base64_encode($input->getArgument('url')) . "/", array(), gzcompress($httpArchive));
+    $restApi = $config->getOpmServer() . "/add/" . $config->getClientId() . "/" . base64_encode($input->getArgument('url')) . "/";
+    var_dump( $restApi);
+    $response = $buzz->post($restApi, array(), gzcompress($httpArchive));
 
     if ($response->getStatusCode() != "200") {
       $output->writeln("An error occured when trying to send the har file to the server.");
