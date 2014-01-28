@@ -1,0 +1,9 @@
+opm-server:
+    host: http://www.linkstream.org
+
+opm-client:
+    clientid = 1
+
+phantom:
+    executable: /var/www/opm.client/vendor/phantomjs/bin/
+
