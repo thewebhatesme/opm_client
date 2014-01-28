@@ -29,7 +29,7 @@ class ProcessUrl extends Command
     $httpArchive = $phantom->createHttpArchive($input->getArgument('url'));
 
     $buzz = new Browser();
-    $response = $buzz->post($config->getOpmServer() . "/add/" . $config->getClientId(). "/" . base64_encode($input->getArgument('url')), array(), gzcompress($httpArchive));
+    $response = $buzz->post($config->getOpmServer() . "/add/" . $config->getClientId() . "/" . base64_encode($input->getArgument('url')) . "/", array(), gzcompress($httpArchive));
 
     if ($response->getStatusCode() != "200") {
       $output->writeln("An error occured when trying to send the har file to the server.");

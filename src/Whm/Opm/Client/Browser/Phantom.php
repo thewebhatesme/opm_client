@@ -30,6 +30,4 @@ class Phantom implements Browser
 
     return $httpArchive;
   }
-
-  // private function
 }
