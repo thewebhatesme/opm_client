@@ -1,6 +1,8 @@
 <?php
 namespace Whm\Opm\Client\Command;
 
+use Whm\Opm\Client\Server\Server;
+
 use Whm\Opm\Client\Config\Config;
 use Buzz\Browser;
 use Whm\Opm\Client\Browser\Phantom;
@@ -28,9 +30,10 @@ class ProcessUrl extends Command
     $phantom = new Phantom($config->getPhantomExecutable());
     $httpArchive = $phantom->createHttpArchive($input->getArgument('url'));
 
+    $server = new Server($config->getOpmServer());
+    $restApi = $server->getRestApiUrl($config->getClientId(), $input->getArgument('url'));
+
     $buzz = new Browser();
-    $restApi = $config->getOpmServer() . "/add/" . $config->getClientId() . "/" . base64_encode($input->getArgument('url')) . "/";
-    var_dump( $restApi);
     $response = $buzz->post($restApi, array(), gzcompress($httpArchive));
 
     if ($response->getStatusCode() != "200") {

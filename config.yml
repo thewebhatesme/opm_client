@@ -6,4 +6,3 @@ opm-client:
 
 phantom:
     executable: /var/www/opm.client/vendor/phantomjs/bin/
-
