@@ -1,0 +1,11 @@
+{
+    "autoload": {
+        "psr-0": {"Whm": "src/"}
+    },
+
+    "require": {
+        "kriswallsmith/buzz": ">=0.6",
+        "symfony/yaml": "v2.4.2",
+        "symfony/console": "v2.4.2"
+    }
+}
