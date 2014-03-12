@@ -11,13 +11,13 @@ class Phantom implements Browser
 
   public function __construct ($phantomPath = null)
   {
-    $this->phantomExecutable = $phantomPath . "bin/phantomjs";
-    $this->netsniffScript = $phantomPath . "examples/netsniff.js";
+    $this->phantomExecutable = $phantomPath . 'bin/phantomjs';
+    $this->netsniffScript = $phantomPath . 'examples/netsniff.js';
   }
 
   private function execute (array $parameters)
   {
-    $cmd = $this->phantomExecutable . " " . implode($parameters, " ");
+    $cmd = $this->phantomExecutable . ' ' . implode($parameters, ' ');
     return shell_exec($cmd);
   }
 
