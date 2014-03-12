@@ -14,8 +14,8 @@ class ProcessUrl extends Command
     {
         $this->setName('processUrl')
             ->setDescription('Process an url and send the result (har file) to an opm server.')
-            ->addArgument('config', InputArgument::REQUIRED, 'Who do you want to greet?')
-            ->addArgument('url', InputArgument::REQUIRED, 'The url that has to fetched');
+            ->addArgument('config', InputArgument::REQUIRED, 'The config file')
+            ->addArgument('url', InputArgument::REQUIRED, 'The url that has to be fetched');
     }
 
     protected function execute (InputInterface $input, OutputInterface $output)
