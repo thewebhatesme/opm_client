@@ -29,16 +29,9 @@ class ProcessUrl extends Command
     $phantom = new Phantom($config->getPhantomExecutable());
     $httpArchive = $phantom->createHttpArchive($input->getArgument('url'));
 
-    $server = new Server($config->getOpmServer());
-    $restApi = $server->getRestApiUrl($config->getClientId(), $input->getArgument('url'));
+    $server = new Server($config->getOpmServer(), $config->getClientId());
 
-    $buzz = new Browser();
-    $response = $buzz->post($restApi, array(), gzcompress($httpArchive));
-
-    if ($response->getStatusCode() != '200') {
-      $output->writeln('An error occured when trying to send the har file to the server.');
-    } else {
-      $output->writeln('Har file successfully send.');
-    }
+    // @todo add try catch block
+    $server->addMessurement($input->getArgument('url'), $httpArchive);
   }
 }

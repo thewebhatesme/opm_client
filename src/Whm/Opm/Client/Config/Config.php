@@ -13,6 +13,10 @@ class Config
     $this->config = $configArray;
   }
 
+  /**
+   * @param string $filename the yaml file name.
+   * @return \Whm\Opm\Client\Config\Config
+   */
   static public function createFromFile( $filename )
   {
     $yamlString = file_get_contents($filename);
