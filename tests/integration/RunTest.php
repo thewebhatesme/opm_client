@@ -24,7 +24,7 @@ class RunTest extends PHPUnit_Framework_TestCase
         $command = $application->find('run');
         $commandTester = new CommandTester($command);
 
-        $commandTester->execute(array('command' => $command->getName(),"config" => "config.yml"));
+        $commandTester->execute(array('command' => $command->getName()));
 
         $this->assertTrue(true);
     }
