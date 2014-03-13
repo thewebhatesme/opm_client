@@ -13,10 +13,13 @@ class Server
 
     private $browser;
 
-    public function __construct ($host, $clientId)
+    private $config;
+
+    public function __construct (Config $config)
     {
-        $this->host = $host;
-        $this->clientId = $clientId;
+        $this->config = $config;
+        $this->host = $this->config->getOpmServer();
+        $this->clientId = $this->config->getClientId();
     }
 
     public function setBrowser (Browser $browser)
@@ -38,16 +41,21 @@ class Server
      */
     public function getMessurementJob ()
     {
-        return new MessurementJob("12:00", array("http://www.google.de","http://www.thewebhatesme.com"));
+        $messurementJob = new MessurementJob("12:00");
+
+        $messurementJob->addTask(new Task("identifier1", 'Whm\Opm\Client\Messure\HttpArchive', $this->config, Array("url" => "http://www.google.de", "_host" => $this->host, "_clientId" => $this->clientId)));
+        $messurementJob->addTask(new Task("identifier2", 'Whm\Opm\Client\Messure\HttpArchive', $this->config, Array("url" => "http://www.thewebhatesme.de", "_host" => $this->host, "_clientId" => $this->clientId)));
+
+        return $messurementJob;
     }
 
-    public function addMessurement ($url, $httpArchive)
+    public function addTaskMessurement ($identifier, $result)
     {
         $browser = $this->getBrowser();
 
-        $restApi = $this->host . '/add/' . $this->clientId . '/' . base64_encode($url) . '/';
+        $restApi = $this->host . '/add/' . $this->clientId . '/' . $identifier . '/';
 
-        $response = $browser->post($restApi, array(), gzcompress($httpArchive));
+        $response = $browser->post($restApi, array(), $result);
         // $response = $browser->post($restApi, array(), ($httpArchive));
 
         if ($response->getStatusCode() != '200') {

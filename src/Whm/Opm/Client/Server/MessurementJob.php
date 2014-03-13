@@ -6,17 +6,21 @@ class MessurementJob
 
     private $identifier;
 
-    private $urls = array();
+    private $tasks = array();
 
-    public function __construct ($identifier, array $urls)
+    public function __construct ($identifier)
     {
         $this->identifier = $identifier;
-        $this->urls = $urls;
     }
 
-    public function getUrls ()
+    public function addTask (Task $task)
     {
-        return $this->urls;
+        $this->tasks[] = $task;
+    }
+
+    public function getTasks ()
+    {
+        return $this->tasks;
     }
 
     public function getIdentifier ()

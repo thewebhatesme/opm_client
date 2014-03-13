@@ -1,6 +1,8 @@
 {
     "autoload": {
-        "psr-0": {"Whm": "src/"}
+        "psr-0": {"Whm": "src/"},
+        "psr-0": {"Doctrine": "src/"},
+        "psr-0": {"phmLabs": "src/"}
     },
 
     "require": {
