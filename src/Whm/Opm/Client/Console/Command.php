@@ -1,5 +1,4 @@
 <?php
-
 namespace Whm\Opm\Client\Console;
 
 use phmLabs\Components\Annovent\Dispatcher;
@@ -10,11 +9,13 @@ abstract class Command extends SymfonyCommand
 
     private $dispatcher;
 
-    public function setDispatcher (Dispatcher $dispatcher)
+    public function setEventDispatcher (Dispatcher $dispatcher)
     {
         $this->dispatcher = $dispatcher;
     }
 
-    protected function getDispatcher ()
-    {}
+    protected function getEventDispatcher ()
+    {
+        return $this->dispatcher;
+    }
 }

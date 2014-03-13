@@ -71,9 +71,15 @@ class Messure extends Command
      *
      * @return void
      */
-    public function setDispatcher (DispatcherInterface $dispatcher)
+    public function setEventDispatcher (Dispatcher $dispatcher)
     {
         $this->dispatcher = $dispatcher;
+    }
+
+    private function initMessurementContainer ()
+    {
+        $this->messurementContainer = new MessurementContainer();
+        $this->dispatcher->notify(new Event('run.messurementcontainer.create', array ("container" => $this->messurementContainer)));
     }
 
     protected function configure ()
@@ -105,6 +111,7 @@ class Messure extends Command
     protected function execute (InputInterface $input, OutputInterface $output)
     {
         $this->initConfig($input->getOption('config'));
+        $this->initMessurementContainer();
 
         $this->server = new Server($this->config);
 

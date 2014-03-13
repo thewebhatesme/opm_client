@@ -1,15 +1,14 @@
 <?php
-
 namespace Whm\Opm\Client\Server;
 
 class MessurementJob
 {
 
-    private $tasks = array ();
+    private $tasks = array();
 
-    public function addTask (Task $task)
+    public function addTask ($identifier, $type, array $parameters)
     {
-        $this->tasks[] = $task;
+        $this->tasks[$identifier] = array("type" => $type,"parameters" => serialize($parameters));
     }
 
     public function getTasks ()

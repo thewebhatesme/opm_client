@@ -9,18 +9,13 @@
  */
 namespace Whm\Opm\Client\Command;
 
-use Whm\Opm\Client\Messure\MessurementContainer;
 use phmLabs\Components\Annovent\Event\Event;
-use phmLabs\Components\Annovent\DispatcherInterface;
-use phmLabs\Components\Annovent\Dispatcher;
 use Whm\Opm\Client\Shell\BlockingExecutorQueue;
 use Whm\Opm\Client\Server\MessurementJob;
 use Whm\Opm\Client\Server\Server;
 use Whm\Opm\Client\Config\Config;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\InputArgument;
 use \Whm\Opm\Client\Console\Command;
 
 /**
@@ -47,7 +42,8 @@ class Run extends Command
 
     /**
      *
-     * @var \Whm\Opm\Client\Shell\BlockingExecutorQueue Queue to manage maximum count of simultaneous request
+     * @var \Whm\Opm\Client\Shell\BlockingExecutorQueue Queue to manage maximum
+     *      count of simultaneous request
      */
     private $blockingExecutorQueue;
 
@@ -56,18 +52,6 @@ class Run extends Command
      * @var DispatcherInterface Event dispatcher
      */
     private $dispatcher;
-
-    /**
-     * Set event dispatcher
-     *
-     * @param \phmLabs\Components\Annovent\DispatcherInterface $dispatcher
-     *
-     * @return void
-     */
-    public function setDispatcher (DispatcherInterface $dispatcher)
-    {
-        $this->dispatcher = $dispatcher;
-    }
 
     protected function configure ()
     {
@@ -82,13 +66,7 @@ class Run extends Command
     private function initConfig ($configFile)
     {
         $this->config = Config::createFromFile($configFile);
-        $this->dispatcher->notify(new Event('run.config.create', array ("config" => $this->config, "configFileName" => $configFile)));
-    }
-
-    private function initMessurementContainer ()
-    {
-        $this->messurementContainer = new MessurementContainer();
-        $this->dispatcher->notify(new Event('run.messurementcontainer.create', array ("container" => $this->messurementContainer)));
+        $this->getEventDispatcher()->notify(new Event('run.config.create', array("config" => $this->config,"configFileName" => $configFile)));
     }
 
     private function initServer ()
@@ -110,7 +88,6 @@ class Run extends Command
     {
         $this->initConfig($input->getOption('config'));
         $this->initServer();
-        $this->initMessurementContainer();
 
         $this->blockingExecutorQueue = new BlockingExecutorQueue($this->config->getMaxParallelRequests());
 
@@ -127,11 +104,14 @@ class Run extends Command
      */
     private function processJob (MessurementJob $job)
     {
+        $commandPrefix = $_SERVER["_"] . " " . $_SERVER["argv"][0] . " messure ";
+
         $tasks = $job->getTasks();
 
-        foreach ($tasks as $task) {
-            $command = $task->getCommand();
+        foreach ($tasks as $identifier => $task) {
+            $command = $commandPrefix . $identifier . " " . $task["type"] . " '" . $task["parameters"] . "'";
             $this->blockingExecutorQueue->addCommand($command);
+            var_dump($command);
         }
 
         $this->blockingExecutorQueue->run();

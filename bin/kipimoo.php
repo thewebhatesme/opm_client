@@ -14,6 +14,7 @@ use Whm\Opm\Client\Command\Run;
 $loader = include_once __DIR__ . "/../vendor/autoload.php";
 $loader->add("phmLabs", __DIR__ . "/../src/");
 $loader->add("Doctrine", __DIR__ . "/../src/");
+$loader->add("Whm", __DIR__ . "/../src/");
 
 // create the event dispatcher
 $dispatcher = new Dispatcher();
@@ -23,13 +24,11 @@ $dispatcher->connectListeners(ModuleHandler::getModules());
 
 // create the application
 $application = new Application();
-$application->setDispatcher($dispatcher);
+$application->setEventDispatcher($dispatcher);
 $application->addStandardOption('config', null, InputOption::VALUE_OPTIONAL, '', 'config.yml');
 
 $dispatcher->notify(new Event('kipimoo.client.application.create', array("application" => $application)));
 
-$runCommand = new Run();
-$runCommand->setDispatcher($dispatcher);
 $application->add(new Run());
 $application->add(new Messure());
 

@@ -43,8 +43,8 @@ class Server
     {
         $messurementJob = new MessurementJob();
 
-        $messurementJob->addTask(new Task("identifier1", 'Whm\Opm\Client\Modules\Messure\HttpArchive\HttpArchive', $this->config, Array("url" => "http://www.google.de", "_host" => $this->host, "_clientId" => $this->clientId)));
-        $messurementJob->addTask(new Task("identifier2", 'Whm\Opm\Client\Modules\Messure\HttpArchive\HttpArchive', $this->config, Array("url" => "http://www.thewebhatesme.de", "_host" => $this->host, "_clientId" => $this->clientId)));
+        $messurementJob->addTask("1id", "Ocm:HttpArchive", Array("url" => "http://www.google.de"));
+        $messurementJob->addTask("2id", "Ocm:HttpArchive", Array("url" => "http://www.thewebhatesme.com"));
 
         return $messurementJob;
     }

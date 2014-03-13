@@ -6,5 +6,5 @@ use Whm\Opm\Client\Config\Config;
 interface Messurement
 {
     public function getType();
-    public function getCommand ();
+    public function run ();
 }
