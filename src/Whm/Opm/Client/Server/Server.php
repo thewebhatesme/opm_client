@@ -1,5 +1,4 @@
 <?php
-
 namespace Whm\Opm\Client\Server;
 
 use Buzz\Browser;
@@ -39,10 +38,7 @@ class Server
      */
     public function getMessurementJob ()
     {
-        return new MessurementJob("12:00", array(
-                "http://www.google.de",
-                "http://www.thewebhatesme.com"
-        ));
+        return new MessurementJob("12:00", array("http://www.google.de","http://www.thewebhatesme.com"));
     }
 
     public function addMessurement ($url, $httpArchive)

@@ -10,13 +10,13 @@ include_once __DIR__.'/../vendor/autoload.php';
 use Whm\Opm\Client\Command\ProcessUrl;
 use Whm\Opm\Client\Command\RunMessurement;
 use Whm\Opm\Client\Command\SetupConfig;
-use Whm\Opm\Client\Command\SetupPhantom;
+use Whm\Opm\Client\Command\SetupPhantomJS;
 use Symfony\Component\Console\Application;
 
 $application = new Application();
 $application->add(new RunMessurement);
 $application->add(new ProcessUrl);
 $application->add(new SetupConfig);
-$application->add(new SetupPhantom);
+$application->add(new SetupPhantomJS);
 
 $application->run();

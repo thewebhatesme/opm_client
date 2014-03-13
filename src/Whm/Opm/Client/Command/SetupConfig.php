@@ -12,8 +12,10 @@ use Whm\Opm\Client\Console\ValidatingDialog;
 
 class SetupConfig extends Command
 {
+
     /**
      * The name of the configuration file
+     *
      * @var string
      */
     private $configFileName = "config.yml";
@@ -31,13 +33,14 @@ class SetupConfig extends Command
     private function checkIfConfigExists (OutputInterface $output)
     {
         if (file_exists($_SERVER["PWD"] . "/" . $this->configFileName)) {
-          $output->writeln("\n<error> Config file already exists. Please (re)move it before creating a new one.</error>\n");
-          die();
+            $output->writeln("\n<error> Config file already exists. Please (re)move it before creating a new one.</error>\n");
+            die();
         }
     }
 
     /**
-     * Execute the setup command to create the client configuration depending on the given config values.
+     * Execute the setup command to create the client configuration depending on
+     * the given config values.
      *
      * @param InputInterface $input
      * @param OutputInterface $output
@@ -59,12 +62,17 @@ class SetupConfig extends Command
     }
 
     /**
-     * Create a client configuration file and save it on the root directory from the client
+     * Create a client configuration file and save it on the root directory from
+     * the client
      *
-     * @param $server
-     * @param $phantom
-     * @param $maxConnections
-     * @param $clientId
+     * @param
+     *            $server
+     * @param
+     *            $phantom
+     * @param
+     *            $maxConnections
+     * @param
+     *            $clientId
      */
     private function createConfigFile ($server, $phantom, $maxConnections, $clientId)
     {

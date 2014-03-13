@@ -4,7 +4,7 @@ namespace Whm\Opm\Client\Browser;
 
 use Whm\Opm\Client\Browser\Browser;
 
-class Phantom implements Browser
+class PhantomJS implements Browser
 {
 
     /**
@@ -20,7 +20,7 @@ class Phantom implements Browser
     private $netsniffScript;
 
     /**
-     * Initialize a phantom object
+     * Initialize a phantomjs object
      *
      * @param null $phantomPath
      */

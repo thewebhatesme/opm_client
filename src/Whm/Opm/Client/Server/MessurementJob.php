@@ -14,12 +14,12 @@ class MessurementJob
         $this->urls = $urls;
     }
 
-    public function getUrls( )
+    public function getUrls ()
     {
         return $this->urls;
     }
 
-    public function getIdentifier( )
+    public function getIdentifier ()
     {
         return $this->identifier;
     }

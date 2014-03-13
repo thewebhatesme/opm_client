@@ -1,5 +1,4 @@
 <?php
-
 namespace Whm\Opm\Client\Command;
 
 use Whm\Opm\Client\Shell\BlockingExecutorQueue;
