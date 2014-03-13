@@ -38,4 +38,9 @@ class Config
   {
     return $this->config['opm-client']['clientid'];
   }
+
+  public function getMaxParallelRequests()
+  {
+      return $this->config['opm-client']['max-parallel-requests'];
+  }
 }

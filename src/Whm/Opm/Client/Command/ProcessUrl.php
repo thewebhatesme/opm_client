@@ -3,7 +3,6 @@ namespace Whm\Opm\Client\Command;
 
 use Whm\Opm\Client\Server\Server;
 use Whm\Opm\Client\Config\Config;
-use Buzz\Browser;
 use Whm\Opm\Client\Browser\Phantom;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputInterface;

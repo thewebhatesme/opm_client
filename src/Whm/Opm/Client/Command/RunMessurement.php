@@ -1,10 +1,11 @@
 <?php
+
 namespace Whm\Opm\Client\Command;
 
+use Whm\Opm\Client\Shell\BlockingExecutorQueue;
+use Whm\Opm\Client\Server\MessurementJob;
 use Whm\Opm\Client\Server\Server;
-
 use Whm\Opm\Client\Config\Config;
-
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -13,6 +14,12 @@ use Symfony\Component\Console\Command\Command;
 
 class RunMessurement extends Command
 {
+
+    private $configFile;
+
+    private $server;
+
+    private $blockingExecutorQueue;
 
     protected function configure ()
     {
@@ -23,12 +30,26 @@ class RunMessurement extends Command
 
     protected function execute (InputInterface $input, OutputInterface $output)
     {
-        $config = Config::createFromFile($input->getArgument('config'));
-        $server = new Server($config->getOpmServer());
+        $this->configFile = $input->getArgument('config');
 
-//         $server->
+        $config = Config::createFromFile($this->configFile);
 
-        $output->writeln('config: ' . $input->getArgument('config'));
-        $output->writeln('doing nothing ... yet');
+        $this->server = new Server($config->getOpmServer(), $config->getClientId());
+
+        $this->blockingExecutorQueue = new BlockingExecutorQueue($config->getMaxParallelRequests());
+
+        $this->processJob($this->server->getMessurementJob());
+    }
+
+    private function processJob (MessurementJob $job)
+    {
+        $urls = $job->getUrls();
+        $identifier = $job->getIdentifier();
+
+        foreach ($urls as $url) {
+            $this->blockingExecutorQueue->addCommand("php bin/client.php processUrl " . $this->configFile . " " . $url);
+        }
+
+        $this->blockingExecutorQueue->run();
     }
 }

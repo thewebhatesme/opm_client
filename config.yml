@@ -3,6 +3,7 @@ opm-server:
 
 opm-client:
     clientid: 1
+    max-parallel-requests: 2
 
 phantom:
-    executable: /var/www/opm.client/vendor/phantomjs/bin/
+    executable: /app1/ela/var/www/app/test.local/ocm/client/vendor/phantomjs/
