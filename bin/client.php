@@ -1,42 +1,35 @@
-
-#!/usr/bin/env php
 <?php
-use phmLabs\Components\Annovent\Dispatcher;
+use Whm\Opm\Client\Console\Application;
+
 use Symfony\Component\Console\Input\InputOption;
-use Whm\Opm\Client\Console\StandardOptionApplication;
+
+use Whm\Opm\Client\Modules\ModuleHandler;
+
 use phmLabs\Components\Annovent\Event\Event;
-use Symfony\Component\Console\Application;
+use phmLabs\Components\Annovent\Dispatcher;
 
-if (! file_exists(__DIR__ . "/../vendor/autoload.php")) {
-    die("\n    You have to run 'composer.phar install' before you can use the client.\n\n");
-}
+use Whm\Opm\Client\Command\Messure;
+use Whm\Opm\Client\Command\Run;
 
-include_once __DIR__ . '/../vendor/autoload.php';
+$loader = include_once __DIR__ . "/../vendor/autoload.php";
+$loader->add("phmLabs", __DIR__ . "/../src/");
+$loader->add("Doctrine", __DIR__ . "/../src/");
+$loader->add("Whm", __DIR__ . "/../src/");
 
-$modules = array("Whm\Opm\Client\Modules\Client\Client",
-                 "Whm\Opm\Client\Modules\Messure\HttpArchive\HttpArchive",
-                 "Whm\Opm\Client\Modules\Setup\PhantomJS\PhantomJS",
-                 "Whm\Opm\Client\Modules\Setup\Config\Config");
+// create the event dispatcher
+$dispatcher = new Dispatcher();
 
-function doctrineloader ($class)
-{
-    if (file_exists(__DIR__ . "/../src/" . str_replace("\\", DIRECTORY_SEPARATOR, $class).".php")) {
-        include_once __DIR__ . "/../src/" . str_replace("\\", DIRECTORY_SEPARATOR, $class).".php";
-    }
-}
-spl_autoload_register("doctrineloader");
+// register modules
+$dispatcher->connectListeners(ModuleHandler::getModules());
 
-$eventDispatcher = new Dispatcher();
-
-foreach ($modules as $module) {
-    $moduleObject = new $module();
-    $eventDispatcher->connectListener($moduleObject);
-}
-
-$eventDispatcher->notify(new Event('client.dispatcher.init', array("dispatcher" => $eventDispatcher)));
-
-$application = new StandardOptionApplication();
+// create the application
+$application = new Application();
+$application->setEventDispatcher($dispatcher);
 $application->addStandardOption('config', null, InputOption::VALUE_OPTIONAL, '', 'config.yml');
-$eventDispatcher->notify(new Event('client.application.init', array("application" => $application)));
+
+$dispatcher->notify(new Event('kipimoo.client.application.create', array("application" => $application)));
+
+$application->add(new Run());
+$application->add(new Messure());
 
 $application->run();
