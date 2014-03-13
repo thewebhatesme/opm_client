@@ -2,6 +2,8 @@
 
 namespace Whm\Opm\Client\Modules\Messure\HttpArchive\Messure;
 
+use Whm\Opm\Client\Browser\PhantomJS;
+
 use Whm\Opm\Client\Config\Config;
 use Whm\Opm\Client\Messure\Messurement;
 
@@ -21,8 +23,9 @@ class HttpArchive implements Messurement
 
     public function run ($identifier, array $parameters)
     {
-        $command = "php bin/client processUrl " . $this->config->getClientId() . " " . $this->config->getOpmServer() . " " . $this->config->getPhantomExecutable() . " " . $this->options["url"];
-        echo $command;
-        return "some har data";
+        $phantom = new PhantomJS($this->config->getPhantomExecutable());
+        $netsniffScript = __DIR__."/../CasperJS/netsniff.js";
+
+        return $phantom->execute(array($netsniffScript, $parameters["url"]));
     }
 }

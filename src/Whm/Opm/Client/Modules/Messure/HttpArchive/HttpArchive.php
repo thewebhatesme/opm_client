@@ -14,16 +14,7 @@ class HttpArchive
     private $config;
 
     /**
-     * @Event("client.application.init")
-     */
-    public function registerCommand (Application $application)
-    {
-        $application->add(new ProcessUrl());
-        var_dump(spl_object_hash($this));
-    }
-
-    /**
-     * @Event("run.config.create")
+     * @Event("config.create")
      */
     public function setConfig (Config $config)
     {
@@ -31,7 +22,7 @@ class HttpArchive
     }
 
     /**
-     * @Event("run.messurementcontainer.create")
+     * @Event("messure.messurementcontainer.create")
      */
     public function register (MessurementContainer $container)
     {

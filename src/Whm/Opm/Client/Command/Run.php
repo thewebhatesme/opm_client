@@ -53,6 +53,10 @@ class Run extends Command
      */
     private $dispatcher;
 
+    private $config;
+
+    private $configFile;
+
     protected function configure ()
     {
         $this->setName('run')->setDescription('Connect to server and run a messurement job.');
@@ -65,6 +69,7 @@ class Run extends Command
      */
     private function initConfig ($configFile)
     {
+        $this->configFile = $configFile;
         $this->config = Config::createFromFile($configFile);
         $this->getEventDispatcher()->notify(new Event('run.config.create', array("config" => $this->config,"configFileName" => $configFile)));
     }
@@ -109,9 +114,8 @@ class Run extends Command
         $tasks = $job->getTasks();
 
         foreach ($tasks as $identifier => $task) {
-            $command = $commandPrefix . $identifier . " " . $task["type"] . " '" . $task["parameters"] . "'";
+            $command = $commandPrefix . $identifier . " " . $task["type"] . " '" . $task["parameters"] . "' --config ".$this->configFile;
             $this->blockingExecutorQueue->addCommand($command);
-            var_dump($command);
         }
 
         $this->blockingExecutorQueue->run();

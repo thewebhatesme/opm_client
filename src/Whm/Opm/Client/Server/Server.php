@@ -43,8 +43,8 @@ class Server
     {
         $messurementJob = new MessurementJob();
 
-        $messurementJob->addTask("1id", "Ocm:HttpArchive", Array("url" => "http://www.google.de"));
-        $messurementJob->addTask("2id", "Ocm:HttpArchive", Array("url" => "http://www.thewebhatesme.com"));
+        $messurementJob->addTask("1id", "Opm:HttpArchive", Array("url" => "http://www.google.de"));
+        $messurementJob->addTask("2id", "Opm:HttpArchive", Array("url" => "http://www.yahoo.com"));
 
         return $messurementJob;
     }

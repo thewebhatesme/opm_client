@@ -23,7 +23,7 @@ namespace Whm\Opm\Client\Browser;
  * @author Nils Langner <nils.langner@phmlabs.com>
  * @link http://phantomjs.org/network-monitoring.html PhantomJS network monitoring documentation
  */
-class PhantomJS implements Browser
+class PhantomJS
 {
 
     /**
@@ -34,22 +34,14 @@ class PhantomJS implements Browser
     private $phantomJsExecutable;
 
     /**
-     * Path to the netSniffing PhantomJS script
-     *
-     * @var string
-     */
-    private $netsniffScript;
-
-    /**
      * Initialize a PhantomJS object
      *
      * @param string $phantomJsPath path tp to *PhantomJS* executeable binary
      * @return void
      */
-    public function __construct ($phantomJsPath = null)
+    public function __construct ($phantomJsExecPath = null)
     {
-        $this->phantomJsExecutable = $phantomJsPath . 'bin/phantomjs';
-        $this->netsniffScript = $phantomJsPath . 'examples/netsniff.js';
+        $this->phantomJsExecutable = $phantomJsExecPath;
     }
 
     /**
@@ -58,26 +50,9 @@ class PhantomJS implements Browser
      * @param array $parameters for PhantomJS
      * @return string shell command
      */
-    private function execute (array $parameters)
+    public function execute (array $parameters)
     {
         $cmd = $this->phantomJsExecutable . ' ' . implode($parameters, ' ');
-
         return shell_exec($cmd);
-    }
-
-    /**
-     * Create HAR archive from the sniffing result and return it.
-     *
-     * @link https://github.com/ariya/phantomjs/blob/master/examples/netsniff.js Netsniff script
-     * @link http://phantomjs.org/network-monitoring.html Introduction in network monitoring with PhantomJS
-     * @link http://www.softwareishard.com/blog/har-12-spec/ HAR archive definition
-     * @param string $url Address is to be collected by the data
-     * @return string HAR archive as JSON object
-     */
-    public function createHttpArchive ($url)
-    {
-        $httpArchive = $this->execute(array ($this->netsniffScript, $url));
-
-        return $httpArchive;
     }
 }

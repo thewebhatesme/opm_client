@@ -10,17 +10,12 @@
 namespace Whm\Opm\Client\Command;
 
 use Whm\Opm\Client\Messure\MessurementContainer;
-
 use phmLabs\Components\Annovent\Event\Event;
-use phmLabs\Components\Annovent\DispatcherInterface;
-use phmLabs\Components\Annovent\Dispatcher;
 use Whm\Opm\Client\Shell\BlockingExecutorQueue;
-use Whm\Opm\Client\Server\MessurementJob;
 use Whm\Opm\Client\Server\Server;
 use Whm\Opm\Client\Config\Config;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 use Whm\Opm\Client\Console\Command;
 
@@ -46,45 +41,23 @@ class Messure extends Command
      */
     private $configFile;
 
+    private $config;
+
+    private $messurementContainer;
+
     /**
      *
      * @var string OPM Server URL
      */
     private $server;
 
-    /**
-     *
-     * @var \Whm\Opm\Client\Shell\BlockingExecutorQueue Queue to manage maximum count of simultaneous request
-     */
-    private $blockingExecutorQueue;
-
-    /**
-     *
-     * @var DispatcherInterface Event dispatcher
-     */
-    private $dispatcher;
-
-    /**
-     * Set event dispatcher
-     *
-     * @param \phmLabs\Components\Annovent\DispatcherInterface $dispatcher
-     *
-     * @return void
-     */
-    public function setEventDispatcher (Dispatcher $dispatcher)
-    {
-        $this->dispatcher = $dispatcher;
-    }
-
-    private function initMessurementContainer ()
-    {
-        $this->messurementContainer = new MessurementContainer();
-        $this->dispatcher->notify(new Event('run.messurementcontainer.create', array ("container" => $this->messurementContainer)));
-    }
-
     protected function configure ()
     {
-        $this->setName('messure')->setDescription('Run a specified messurement.');
+        $this->setName('messure')
+            ->setDescription('Run a specified messurement.')
+            ->addArgument('identifier', InputArgument::REQUIRED, 'The task identifier.')
+            ->addArgument('messureType', InputArgument::REQUIRED, 'The messurement type.')
+            ->addArgument('parameters', InputArgument::REQUIRED, 'The parameters.');
     }
 
     /**
@@ -94,8 +67,21 @@ class Messure extends Command
      */
     private function initConfig ($configFile)
     {
+        $this->configFile = $configFile;
         $this->config = Config::createFromFile($configFile);
-        $this->dispatcher->notify(new Event('run.config.create', array ("config" => $this->config, "configFileName" => $configFile)));
+        $this->getEventDispatcher()->notify(new Event('config.create', array("config" => $this->config,"configFileName" => $configFile)));
+    }
+
+    private function initMessurementContainer ()
+    {
+        $this->messurementContainer = new MessurementContainer();
+        $this->getEventDispatcher()->notify(new Event('messure.messurementcontainer.create', array("container" => $this->messurementContainer)));
+    }
+
+    private function initServer ()
+    {
+        $this->server = new Server($this->config);
+        $this->getEventDispatcher()->notify(new Event('server.create', array("server" => $this->server)));
     }
 
     /**
@@ -112,34 +98,15 @@ class Messure extends Command
     {
         $this->initConfig($input->getOption('config'));
         $this->initMessurementContainer();
+        $this->initServer();
 
-        $this->server = new Server($this->config);
+        $identifier = $input->getArgument('identifier');
+        $messureType = $input->getArgument("messureType");
+        $parameters = unserialize($input->getArgument('parameters'));
 
-        $this->messurementContainer = new MessurementContainer();
-        $this->dispatcher->notify(new Event('run.messurementcontainer.create', array ("config" => $this->config, "configFileName" => $configFile)));
+        $messureObject = $this->messurementContainer->getMessurement($messureType);
+        $result = $messureObject->run($identifier, $parameters);
 
-        $this->blockingExecutorQueue = new BlockingExecutorQueue($this->config->getMaxParallelRequests());
-
-        $this->processJob($this->server->getMessurementJob());
-    }
-
-    /**
-     * process the job
-     *
-     * @param \Whm\Opm\Client\Server\MessurementJob $job
-     * @todo Use *\Whm\Opm\Client\Config* object to build the cli command
-     *
-     * @return void
-     */
-    private function processJob (MessurementJob $job)
-    {
-        $tasks = $job->getTasks();
-
-        foreach ($tasks as $task) {
-            $command = $task->getCommand();
-            $this->blockingExecutorQueue->addCommand($command);
-        }
-
-        $this->blockingExecutorQueue->run();
+        $this->server->addTaskMessurement($identifier, $result);
     }
 }
