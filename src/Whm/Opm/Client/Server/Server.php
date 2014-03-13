@@ -12,6 +12,6 @@ class Server
 
   public function getRestApiUrl($clientId, $url)
   {
-    return $this->host . "/add/" . $clientId . "/" . base64_encode($url) . "/";
+    return $this->host . '/add/' . $clientId . '/' . base64_encode($url) . '/';
   }
 }

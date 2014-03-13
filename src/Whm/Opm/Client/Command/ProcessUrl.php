@@ -2,7 +2,6 @@
 namespace Whm\Opm\Client\Command;
 
 use Whm\Opm\Client\Server\Server;
-
 use Whm\Opm\Client\Config\Config;
 use Buzz\Browser;
 use Whm\Opm\Client\Browser\Phantom;
@@ -17,7 +16,7 @@ class ProcessUrl extends Command
 
   protected function configure ()
   {
-    $this->setName('subtask:processUrl')
+    $this->setName('processUrl')
       ->setDescription('Process an url and send the result (har file) to an opm server.')
       ->addArgument('config', InputArgument::REQUIRED, 'The config file')
       ->addArgument('url', InputArgument::REQUIRED, 'The url that has to be fetched');
@@ -36,10 +35,10 @@ class ProcessUrl extends Command
     $buzz = new Browser();
     $response = $buzz->post($restApi, array(), gzcompress($httpArchive));
 
-    if ($response->getStatusCode() != "200") {
-      $output->writeln("An error occured when trying to send the har file to the server.");
+    if ($response->getStatusCode() != '200') {
+      $output->writeln('An error occured when trying to send the har file to the server.');
     } else {
-      $output->writeln("Har file successfully send.");
+      $output->writeln('Har file successfully send.');
     }
   }
 }

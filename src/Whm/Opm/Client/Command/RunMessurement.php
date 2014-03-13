@@ -19,7 +19,7 @@ class RunMessurement extends Command
 
     protected function execute (InputInterface $input, OutputInterface $output)
     {
-        $output->writeln("config: " . $input->getArgument('config'));
-        $output->writeln("doing nothing ... yet");
+        $output->writeln('config: ' . $input->getArgument('config'));
+        $output->writeln('doing nothing ... yet');
     }
 }
