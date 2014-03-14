@@ -6,3 +6,5 @@ config.yml
 composer.lock
 /nbproject
 /vendor
+client.phar
+box.phar

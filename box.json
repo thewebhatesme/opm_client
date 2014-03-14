@@ -1,0 +1,31 @@
+{
+    "alias": "client.phar",
+    "chmod": "0755",
+    "compactors": [
+        "Herrera\\Box\\Compactor\\Json",
+        "Herrera\\Box\\Compactor\\Php"
+    ],
+    "directories": [
+        "vendor"
+    ],
+    "directories-bin": [
+        "src"
+    ],
+    "files": [
+        "bin/client"
+    ],
+    "finder": [
+        {
+            "name": "*.php",
+            "exclude": [
+                "Tests",
+                "tests"
+            ],
+            "in": "vendor"
+        }
+    ],
+    "git-version": "package_version",
+    "main": "bin/client",
+    "output": "client.phar",
+    "stub": true
+}

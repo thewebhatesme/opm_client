@@ -1,0 +1,19 @@
+#!/usr/bin/env php
+<?php
+
+$rootDir = getcwd();
+// php on windows can't use the shebang line from system()
+$interpreter = PHP_OS == 'WINNT' ? 'php.exe' : '';
+$box = $rootDir.'/box.phar';
+
+//get box
+if(file_exists($box)){
+    system(sprintf('php %s', $box.' update'), $composerable);
+} else {
+    system(sprintf('curl %s | php -d=phar.readonly=Off -d=phar.require_hash=Off', 'http://box-project.org/installer.php'), $composerable);
+}
+
+//build
+if (isset($composerable) && $composerable == 0) {
+    system(sprintf('php %s', $box.' build'));
+}
