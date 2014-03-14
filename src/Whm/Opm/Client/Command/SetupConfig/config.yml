@@ -1,0 +1,9 @@
+opm-server:
+    host: <?php echo $server; ?>
+
+opm-client:
+    clientid: <?php echo $clientId; ?>
+    max-parallel-requests: <?php echo $maxConnections; ?>
+
+phantom:
+    executable: <?php echo $phantom; ?>
