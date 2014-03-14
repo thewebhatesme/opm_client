@@ -1,6 +1,0 @@
-opm-server:
-    host: http://www.linkstream.org
-opm-client:
-    clientid: sdferg    max-parallel-requests: 5
-phantom:
-    executable: /citools/tools/common/phantomjs/1.9.7/bin/phantomjs
