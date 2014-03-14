@@ -2,6 +2,7 @@
 .idea
 .project
 .settings/
+config.yml
 composer.lock
 /nbproject
 /vendor
