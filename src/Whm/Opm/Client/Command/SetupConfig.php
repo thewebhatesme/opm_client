@@ -1,75 +1,56 @@
 <?php
-
 namespace Whm\Opm\Client\Command;
 
+use Symfony\Component\Validator\Constraints\Range;
+use Symfony\Component\Validator\Constraints\Url;
+use Symfony\Component\Validator\Constraints\File;
+use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Command\Command;
+use Whm\Opm\Client\Console\ValidatingDialog;
 
 class SetupConfig extends Command
 {
-    private $configFileName = "config.yml";
 
-    protected function configure ()
-    {
-        $this->setName('setup:config')->setDescription('Process an url and send the result (har file) to an opm server.');
+  private $configFileName = "config.yml";
+
+  protected function configure ()
+  {
+    $this->setName('setup:config')->setDescription('Process an url and send the result (har file) to an opm server.');
+  }
+
+  private function checkIfConfigExists (OutputInterface $output)
+  {
+    if (file_exists($_SERVER["PWD"] . "/" . $this->configFileName)) {
+      $output->writeln("\n<error> Config file already exists. Please (re)move it before creating a new one.</error>\n");
+      die();
     }
+  }
 
-    protected function execute (InputInterface $input, OutputInterface $output)
-    {
+  protected function execute (InputInterface $input, OutputInterface $output)
+  {
+    $this->checkIfConfigExists($output);
 
-        if( file_exists($_SERVER["PWD"] . "/".$this->configFileName)) {
-            $output->writeln("");
-            $output->writeln("      <error>Config file already exists. Please (re)move it before creating a new one.</error>");
-            $output->writeln("");
-            die;
-        }
+    $dialog = new ValidatingDialog($this->getHelperSet()->get('dialog'), $output);
 
-        $output->writeln("");
-        $output->writeln("   Open Performance Monitor");
-        $output->writeln("   ========================");
-        $output->writeln("");
+    $clientId = $dialog->ask("Please enter your client id: ", new Length(5)) . "\n";
+    $phantom = $dialog->ask("Please enter path to your phantomjs executable: ", new File());
+    $server = $dialog->ask("Please enter the server address (press enter for http://www.linkstream.org): ", new Url(), false, "http://www.linkstream.org");
+    $maxConnections = $dialog->ask("Please enter the number of max. connections (press enter for default: 5): ", new Range(array("min" => 1,"max" => 10)), false, 5);
 
-        $clientId = readline("   Your client id: ");
+    $this->createConfigFile($server, $phantom, $maxConnections, $clientId);
 
-        $phantomFound = false;
-        while (! $phantomFound) {
-            $phantom = readline("   Path to phantomjs executable: ");
-            if(!is_file($phantom)) {
-                $output->writeln("");
-                $output->writeln("      <error>Phantomjs not found. Please try again. If you don't have phantomjs installed use client.phar setup:phantom.</error>");
-                $output->writeln("");
-            }else{
-                $phantomFound = true;
-            }
-        }
+    $output->writeln("\n<info> Config (" . $this->configFileName . ") was created.</info>\n");
+  }
 
-        $server = readline("   Open Performance Monitor Server (press enter for default server www.linkstream): ");
+  private function createConfigFile ($server, $phantom, $maxConnections, $clientId)
+  {
+    ob_start();
+    include __DIR__ . "/SetupConfig/config.yml";
+    $config = ob_get_contents();
+    ob_end_clean();
 
-        if ($server == "")
-            $server = "http://www.linkstream.org";
-
-        $maxConnections = readline("   Parallel Connections (press enter for default: 5): ");
-
-        if ($maxConnections == "")
-            $maxConnections = 5;
-
-        $this->createConfigFile($server, $phantom, $maxConnections, $clientId);
-
-        $output->writeln("");
-        $output->writeln("   <info>Config (".$this->configFileName.") was created.</info>");
-        $output->writeln("");
-    }
-
-    private function createConfigFile($server, $phantom, $maxConnections, $clientId)
-    {
-        ob_start();
-        include __DIR__."/SetupConfig/config.yml";
-        $config = ob_get_contents();
-        ob_end_clean();
-
-        file_put_contents($this->configFileName, $config);
-    }
+    file_put_contents($this->configFileName, $config);
+  }
 }
