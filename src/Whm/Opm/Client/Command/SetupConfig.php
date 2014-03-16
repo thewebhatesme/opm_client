@@ -44,6 +44,8 @@ class SetupConfig extends Command
      *
      * @param InputInterface $input
      * @param OutputInterface $output
+     *
+     * @return bool
      */
     protected function execute (InputInterface $input, OutputInterface $output)
     {
@@ -59,20 +61,18 @@ class SetupConfig extends Command
         $this->createConfigFile($server, $phantom, $maxConnections, $clientId);
 
         $output->writeln("\n<info> Config (" . $this->configFileName . ") was created.</info>\n");
+
+        return true;
     }
 
     /**
      * Create a client configuration file and save it on the root directory from
      * the client
      *
-     * @param
-     *            $server
-     * @param
-     *            $phantom
-     * @param
-     *            $maxConnections
-     * @param
-     *            $clientId
+     * @param $server
+     * @param $phantom
+     * @param $maxConnections
+     * @param $clientId
      */
     private function createConfigFile ($server, $phantom, $maxConnections, $clientId)
     {

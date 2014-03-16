@@ -12,7 +12,7 @@ class SetupPhantomJS extends Command
 
     protected function configure ()
     {
-        $this->setName('setup:phantomjs')->setDescription('Process an url and send the result (har file) to an opm server.');
+        $this->setName('setup:phantomjs')->setDescription('Install the phantomJS binary in the bin folder.');
     }
 
     protected function execute (InputInterface $input, OutputInterface $output)
