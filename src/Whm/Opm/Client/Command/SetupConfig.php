@@ -12,45 +12,68 @@ use Whm\Opm\Client\Console\ValidatingDialog;
 
 class SetupConfig extends Command
 {
+    /**
+     * The name of the configuration file
+     * @var string
+     */
+    private $configFileName = "config.yml";
 
-  private $configFileName = "config.yml";
-
-  protected function configure ()
-  {
-    $this->setName('setup:config')->setDescription('Process an url and send the result (har file) to an opm server.');
-  }
-
-  private function checkIfConfigExists (OutputInterface $output)
-  {
-    if (file_exists($_SERVER["PWD"] . "/" . $this->configFileName)) {
-      $output->writeln("\n<error> Config file already exists. Please (re)move it before creating a new one.</error>\n");
-      die();
+    protected function configure ()
+    {
+        $this->setName('setup:config')->setDescription('Process an url and send the result (har file) to an opm server.');
     }
-  }
 
-  protected function execute (InputInterface $input, OutputInterface $output)
-  {
-    $this->checkIfConfigExists($output);
+    /**
+     * Checks if a client configuration file exists
+     *
+     * @param OutputInterface $output
+     */
+    private function checkIfConfigExists (OutputInterface $output)
+    {
+        if (file_exists($_SERVER["PWD"] . "/" . $this->configFileName)) {
+          $output->writeln("\n<error> Config file already exists. Please (re)move it before creating a new one.</error>\n");
+          die();
+        }
+    }
 
-    $dialog = new ValidatingDialog($this->getHelperSet()->get('dialog'), $output);
+    /**
+     * Execute the setup command to create the client configuration depending on the given config values.
+     *
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     */
+    protected function execute (InputInterface $input, OutputInterface $output)
+    {
+        $this->checkIfConfigExists($output);
 
-    $clientId = $dialog->ask("Please enter your client id: ", new Length(5)) . "\n";
-    $phantom = $dialog->ask("Please enter path to your phantomjs executable: ", new File());
-    $server = $dialog->ask("Please enter the server address (press enter for http://www.linkstream.org): ", new Url(), false, "http://www.linkstream.org");
-    $maxConnections = $dialog->ask("Please enter the number of max. connections (press enter for default: 5): ", new Range(array("min" => 1,"max" => 10)), false, 5);
+        $dialog = new ValidatingDialog($this->getHelperSet()->get('dialog'), $output);
 
-    $this->createConfigFile($server, $phantom, $maxConnections, $clientId);
+        $clientId = $dialog->ask("Please enter your client id: ", new Length(5)) . "\n";
+        $phantom = $dialog->ask("Please enter path to your phantomjs executable: ", new File());
+        $server = $dialog->ask("Please enter the server address (press enter for http://www.linkstream.org): ", new Url(), false, "http://www.linkstream.org");
+        $maxConnections = $dialog->ask("Please enter the number of max. connections (press enter for default: 5): ", new Range(array("min" => 1,"max" => 10)), false, 5);
 
-    $output->writeln("\n<info> Config (" . $this->configFileName . ") was created.</info>\n");
-  }
+        $this->createConfigFile($server, $phantom, $maxConnections, $clientId);
 
-  private function createConfigFile ($server, $phantom, $maxConnections, $clientId)
-  {
-    ob_start();
-    include __DIR__ . "/SetupConfig/config.yml";
-    $config = ob_get_contents();
-    ob_end_clean();
+        $output->writeln("\n<info> Config (" . $this->configFileName . ") was created.</info>\n");
+    }
 
-    file_put_contents($this->configFileName, $config);
-  }
+    /**
+     * Create a client configuration file and save it on the root directory from the client
+     *
+     * @param $server
+     * @param $phantom
+     * @param $maxConnections
+     * @param $clientId
+     */
+    private function createConfigFile ($server, $phantom, $maxConnections, $clientId)
+    {
+        ob_start();
+        include __DIR__ . "/SetupConfig/config.yml";
+        $config = ob_get_contents();
+        ob_end_clean();
+
+        // Write configuration to file and save it
+        file_put_contents($this->configFileName, $config);
+    }
 }
