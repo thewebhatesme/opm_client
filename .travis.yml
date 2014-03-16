@@ -7,4 +7,4 @@ php:
 before_script:
   - composer install
 
-script: phpunit -c test
+script: phpunit -c tests
