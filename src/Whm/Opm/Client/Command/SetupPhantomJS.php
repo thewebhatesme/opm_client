@@ -57,7 +57,7 @@ class SetupPhantomJS extends Command
      * @param OutputInterface $output
      * @throws \Exception
 
-     * @return int|null|void
+     * @return bool
      */
     protected function execute (InputInterface $input, OutputInterface $output)
     {
