@@ -47,24 +47,33 @@ class RunMessurement extends Command
      * @var string OPM Server URL
      */
     private $server;
+
+    /**
+     * @var  \Whm\Opm\Client\Shell\BlockingExecutorQueue Queue to manage maximum count of simultaneous request
+     */
     private $blockingExecutorQueue;
 
     /**
-     * @var DispatcherInterface Description
+     * @var DispatcherInterface Event dispatcher
      */
     private $dispatcher;
 
     /**
-     * 
+     * Set event dispatcher
+     * @param \phmLabs\Components\Annovent\DispatcherInterface $dispatcher
+     *
+     * @return void
      */
-    public function setDispatcher(DispatcherInterface $dispatcher) {
+    public function setDispatcher(DispatcherInterface $dispatcher)
+    {
         $this->dispatcher = $dispatcher;
     }
 
     /**
      * {@inheritDoc}
      */
-    protected function configure() {
+    protected function configure()
+    {
         $this->setName('run')
                 ->setDescription('Connect to server and run a messurement job.')
                 ->addArgument('config', InputArgument::REQUIRED, 'The config file');
@@ -80,7 +89,8 @@ class RunMessurement extends Command
      *
      * @return void
      */
-    protected function execute(InputInterface $input, OutputInterface $output) {
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
         $this->configFile = $input->getArgument('config');
 
         $config = Config::createFromFile($this->configFile);
@@ -100,7 +110,8 @@ class RunMessurement extends Command
      *
      * @return void
      */
-    private function processJob(MessurementJob $job) {
+    private function processJob(MessurementJob $job)
+    {
         $tasks = $job->getTasks();
 
         foreach ($tasks as $task) {
