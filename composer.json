@@ -7,6 +7,7 @@
         "kriswallsmith/buzz": ">=0.6",
         "symfony/yaml": "v2.4.2",
         "symfony/console": "v2.4.2",
-        "symfony/validator": "v2.4.2"
+        "symfony/validator": "v2.4.2",
+        "jakoch/phantomjs-installer": "1.9.7"
     }
 }
