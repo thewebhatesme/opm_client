@@ -7,5 +7,5 @@
 /vendor
 box.phar
 client.phar
-config.yml
+/config.yml
 composer.lock
