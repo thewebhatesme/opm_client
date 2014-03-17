@@ -2,9 +2,10 @@
 .idea
 .project
 .settings/
-config.yml
-composer.lock
+/docs
 /nbproject
 /vendor
-client.phar
 box.phar
+client.phar
+config.yml
+composer.lock
