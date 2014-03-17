@@ -1,10 +1,10 @@
 <?php
+
 class TrueTest extends PHPUnit_Framework_TestCase
 {
     // ...
-
-    public function testCanIsTrue()
+    public function testCanIsTrue ()
     {
-	$this->assertTrue(true);
+        $this->assertTrue(true);
     }
 }
