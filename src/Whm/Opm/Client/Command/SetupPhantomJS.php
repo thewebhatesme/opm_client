@@ -1,22 +1,49 @@
 <?php
+/**
+ * This file is part of the Open Performance Monitor Client package
+ *
+ * The Open Performance Monitor collects data to measure the performance of websites
+ *
+ * @package OPMCLient
+ */
+
 namespace Whm\Opm\Client\Command;
 
-use Composer\Composer;
-use Composer\Package\Package;
-use Composer\Package\Version\VersionParser;
-use PhantomInstaller\Installer;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Validator\Constraints\NotNull;
+use Whm\Opm\Client\Console\ValidatingDialog;
+use Whm\Opm\Client\Installer\PhantomJSInstaller;
 
+/**
+ * Class SetupPhantomJS
+ *
+ * Class to install the phantomjs binary to a specific folder and
+ * copy the netsniff.js script to the project directory.
+ *
+ * @category Command
+ * @package  OPMClient
+ * @license  https://raw.github.com/thewebhatesme/opm_server/master/LICENSE
+ * @version  0.0.1
+ * @since    2014-01-28
+ * @author   Philipp Bräutigam <philipp.braeutigam@googlemail.com>
+ */
 class SetupPhantomJS extends Command
 {
     /**
      * The PhantomJS Version
+     * @const string
      */
     const PHANTOMJS_VERSION = '1.9.7';
+
+    /**
+     * The installation path for the binary
+     * @var null
+     */
+    protected $installDir = null;
 
     protected function configure ()
     {
@@ -29,46 +56,30 @@ class SetupPhantomJS extends Command
      * @param InputInterface $input
      * @param OutputInterface $output
      * @throws \Exception
+
      * @return int|null|void
      */
     protected function execute (InputInterface $input, OutputInterface $output)
     {
-        if(!$downloadPath = Installer::getURL(self::PHANTOMJS_VERSION)) {
-            throw new \Exception('No valid download URI choosed. Please check your system configuration.');
-        }
-        $phantomArchive = substr(strrchr($downloadPath, '/'), 1);
+        try {
+            $dialog = new ValidatingDialog($this->getHelperSet()->get('dialog'), $output);
+            $this->installDir = $dialog->ask('Please enter your installation path (for example ./bin): ', new NotNull()) . PHP_EOL;
+            $downloadPath = PhantomJSInstaller::getURL(self::PHANTOMJS_VERSION);
 
-        // Download the phantomJS binary
-        if(!file_exists($phantomArchive)) {
-            $output->writeln('Download the archive...');
-            if(!file_put_contents($phantomArchive, file_get_contents($downloadPath))) {
-                throw new \Exception('There was a problem due download the phantomJS binary. Please try again later.');
-            }
-            $output->writeln('Downloading the archive was successfully.');
-        }
+            $output->writeln('Downloading the phantomjs binary...');
+            PhantomJSInstaller::downloadArchive($downloadPath);
+            $output->writeln('Downloading was successfully.');
 
-        // Unpack the phantomJS binary
-        switch(Installer::getOS()) {
-            case 'linux':
-                shell_exec('tar xfvj ' . $phantomArchive);
-                break;
-
-            default:
-                shell_exec('unzip ' . $phantomArchive);
-                break;
+            $output->writeln('Install the phantomjs binary...');
+            PhantomJSInstaller::extractArchive($downloadPath, $this->installDir);
+        } catch(\Exception $e) {
+            die('An error occured due installation routine' . PHP_EOL . $e->getMessage());
         }
 
-        // Get extracted folder name
-        // @TODO refactoring needed
-        $unusedFileExtensions = array('.zip', '.tar', '.bz2');
-        $fileName = str_replace($unusedFileExtensions, '', $phantomArchive);
+        $output->writeln('Removing temporary install folder...');
+        PhantomJSInstaller::cleanup();
+        $output->writeln('Installation of phantomjs completed.');
 
-        // Move needed files in to the directories
-        rename($fileName . DIRECTORY_SEPARATOR . 'bin' . DIRECTORY_SEPARATOR . 'phantomjs', './bin/phantomjs');
-        rename($fileName . DIRECTORY_SEPARATOR . 'examples', './examples');
-
-        // Remove unneeded files
-        shell_exec('rm -rf ' . $fileName);
-        shell_exec('rm ' . $phantomArchive);
+        return true;
     }
 }
