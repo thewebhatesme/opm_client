@@ -1,12 +1,12 @@
 <?php
 
-use Whm\Opm\Client\Command\RunMessurement;
+use Whm\Opm\Client\Command\ProcessUrl;
 
 use Symfony\Component\Console\Application;
 
 use Symfony\Component\Console\Tester\CommandTester;
 
-class RunMessurementTest extends PHPUnit_Framework_TestCase
+class ProcessUrlTest extends PHPUnit_Framework_TestCase
 {
 
     public function setUp ()
@@ -17,14 +17,14 @@ class RunMessurementTest extends PHPUnit_Framework_TestCase
         }
     }
 
-    public function testRunMessurement ()
+    public function testProcessUrl ()
     {
         $application = new Application();
-        $application->add(new RunMessurement());
-        $command = $application->find('runMessurement');
+        $application->add(new ProcessUrl());
+        $command = $application->find('processUrl');
         $commandTester = new CommandTester($command);
 
-        $commandTester->execute(array('command' => $command->getName(),"config" => "config.yml"));
+        $commandTester->execute(array('command' => $command->getName(), "config" => "config.yml", "url" => "http://www.google.de"));
 
         $this->assertTrue(true);
     }
