@@ -32,9 +32,10 @@ class BlockingExecutorQueue
 
     private function execute ($command)
     {
+        #$noHubCommand = "nohup $command & > /dev/null < /dev/null";
         $noHubCommand = "nohup $command > /dev/null";
         $PID = shell_exec($noHubCommand);
-        $this->runningCommands = array($PID => $command);
+        $this->runningCommands[$PID] = $command;
     }
 
     private function maxRunningCommandsReached ()
