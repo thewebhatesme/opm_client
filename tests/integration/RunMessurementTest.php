@@ -15,7 +15,7 @@ class RunMessurementTest extends PHPUnit_Framework_TestCase
     {
         $configfile = __DIR__ . "/../../config.yml";
         if (! file_exists($configfile)) {
-            copy(__DIR__ . "/config.yml", $configfile);
+            copy(__DIR__ . "/fixtures/config.yml", $configfile);
         }
     }
 
