@@ -1,5 +1,5 @@
 <?php
-namespace Whm\Opm\Client\Command;
+namespace Whm\Opm\Client\Modules\Setup\Config\Command;
 
 use Symfony\Component\Validator\Constraints\Range;
 use Symfony\Component\Validator\Constraints\Url;

@@ -8,14 +8,17 @@
  * @package OPMCLient
  */
 
-namespace Whm\Opm\Client\Command;
+namespace Whm\Opm\Client\Modules\Client\Command;
 
+use phmLabs\Components\Annovent\DispatcherInterface;
+use phmLabs\Components\Annovent\Dispatcher;
 use Whm\Opm\Client\Shell\BlockingExecutorQueue;
 use Whm\Opm\Client\Server\MessurementJob;
 use Whm\Opm\Client\Server\Server;
 use Whm\Opm\Client\Config\Config;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Command\Command;
 
@@ -44,19 +47,26 @@ class RunMessurement extends Command
      * @var string OPM Server URL
      */
     private $server;
+    private $blockingExecutorQueue;
 
     /**
-     * @var type
+     * @var DispatcherInterface Description
      */
-    private $blockingExecutorQueue;
+    private $dispatcher;
+
+    /**
+     * 
+     */
+    public function setDispatcher(DispatcherInterface $dispatcher) {
+        $this->dispatcher = $dispatcher;
+    }
 
     /**
      * {@inheritDoc}
      */
-    protected function configure()
-    {
-        $this->setName('runMessurement')
-                ->setDescription('Process an url and send the result (har file) to an opm server.')
+    protected function configure() {
+        $this->setName('run')
+                ->setDescription('Connect to server and run a messurement job.')
                 ->addArgument('config', InputArgument::REQUIRED, 'The config file');
     }
 
@@ -70,21 +80,16 @@ class RunMessurement extends Command
      *
      * @return void
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
-    {
+    protected function execute(InputInterface $input, OutputInterface $output) {
         $this->configFile = $input->getArgument('config');
 
         $config = Config::createFromFile($this->configFile);
 
-        $this->server = new Server($config->getOpmServer(), $config->getClientId());
+        $this->server = new Server($config);
 
         $this->blockingExecutorQueue = new BlockingExecutorQueue($config->getMaxParallelRequests());
 
-        try {
-            $this->processJob($this->server->getMessurementJob());
-        } catch (\DomainException $e) {
-            throw $e;
-        }
+        $this->processJob($this->server->getMessurementJob());
     }
 
     /**
@@ -95,12 +100,12 @@ class RunMessurement extends Command
      *
      * @return void
      */
-    private function processJob(MessurementJob $job)
-    {
-        $urls = $job->getUrls();
+    private function processJob(MessurementJob $job) {
+        $tasks = $job->getTasks();
 
-        foreach ($urls as $url) {
-            $this->blockingExecutorQueue->addCommand("bin/client processUrl " . $this->configFile . " " . $url);
+        foreach ($tasks as $task) {
+            $command = $task->getCommand();
+            $this->blockingExecutorQueue->addCommand($command);
         }
 
         $this->blockingExecutorQueue->run();
