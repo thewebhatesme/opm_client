@@ -26,8 +26,8 @@ class PhantomJS implements Browser
      */
     public function __construct ($phantomPath = null)
     {
-        $this->phantomExecutable = $phantomPath . 'bin/phantomjs';
-        $this->netsniffScript = $phantomPath . 'examples/netsniff.js';
+        $this->phantomExecutable = $phantomPath;
+        $this->netsniffScript = $phantomPath . '/examples/netsniff.js';
     }
 
     /**
