@@ -59,7 +59,7 @@ class Server
         // $response = $browser->post($restApi, array(), ($httpArchive));
 
         if ($response->getStatusCode() != '200') {
-            throw new \Exception("Couldn't connect to server (url: " . $restApi . " | " . $response->getStatusCode() . " - " . $response->getReasonPhrase() . ")");
+            throw new \DomainException("Couldn't connect to server (url: " . $restApi . " | " . $response->getStatusCode() . " - " . $response->getReasonPhrase() . ")");
         }
     }
 }

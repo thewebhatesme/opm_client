@@ -1,49 +1,103 @@
 <?php
+/**
+ * This file is part of the Open Performance Monitor Client package
+ *
+ * The Open Performance Monitor collects data to measure the performance of websites
+ *
+ * @package OPMCLient
+ */
+
 namespace Whm\Opm\Client\Config;
 
 use Symfony\Component\Yaml\Yaml;
+use Symfony\Component\Yaml\Exception\ParseException;
 
+/**
+ * Config
+ *
+ * To handle and load configurations from yaml files.
+ *
+ * @category Config
+ * @package  OPMClient
+ * @license    https://raw.github.com/thewebhatesme/opm_server/master/LICENSE
+ * @version   GIT: $Id$
+ * @since       Date: 2014-01-28
+ * @author    Nils Langner <nils.langner@phmlabs.com>
+ * @author    André Lademann <andre.lademann@preogrammerq.eu>
+ */
 class Config
 {
 
     private $config = array();
 
-    public function __construct (array $configArray)
+    /**
+     * Constructor to hold configuration array
+     *
+     * @param array $configArray
+     *
+     * @return void
+     */
+    public function __construct(array $configArray)
     {
         $this->config = $configArray;
     }
 
     /**
+     * Load configuration data in this object
      *
-     * @param string $filename
-     *            the yaml file name.
+     * @param string                        $filePath the yaml file name.
+     * @throws \InvalidArgumentException
+     * @throws \Symfony\Component\Yaml\Exception\ParseException
+     *
      * @return \Whm\Opm\Client\Config\Config
      */
-    public static function createFromFile ($filename)
+    public static function createFromFile($filePath)
     {
-        $yamlString = file_get_contents($filename);
+        if (!file_exists($filePath)) {
+            throw new \InvalidArgumentException('Configuration file was not found.');
+        }
+       $yamlString = file_get_contents($filePath);
         $yaml = new Yaml();
 
-        return new self($yaml->parse($yamlString));
+        try {
+            $valueArray = $yaml->parse(file_get_contents($filePath));
+        } catch (ParseException $e) {
+            throw $e;
+        }
+
+        return new self($valueArray);
     }
 
-    public function getPhantomExecutable ()
+    /**
+     * @return string path to PhantomJS binary
+     */
+    public function getPhantomExecutable()
     {
         return $this->config['phantom']['executable'];
     }
 
-    public function getOpmServer ()
+    /**
+     * @return string Host of the Open Performance Monitor server
+     */
+    public function getOpmServer()
     {
         return $this->config['opm-server']['host'];
     }
 
-    public function getClientId ()
+    /**
+     * @return string The user ID of the client, with which he is registered with the server.
+     */
+    public function getClientId()
     {
         return $this->config['opm-client']['clientid'];
     }
 
-    public function getMaxParallelRequests ()
+    /**
+     * @return int The maximum number of simultaneous client requestst.
+     */
+    public function getMaxParallelRequests()
     {
-        return $this->config['opm-client']['max-parallel-requests'];
+        return (int) $this->config['opm-client']['max-parallel-requests'];
     }
+
 }
