@@ -1,6 +1,9 @@
+
 #!/usr/bin/env php
 <?php
 use phmLabs\Components\Annovent\Dispatcher;
+use Symfony\Component\Console\Input\InputOption;
+use Whm\Opm\Client\Console\StandardOptionApplication;
 use phmLabs\Components\Annovent\Event\Event;
 use Symfony\Component\Console\Application;
 
@@ -32,7 +35,8 @@ foreach ($modules as $module) {
 
 $eventDispatcher->notify(new Event('client.dispatcher.init', array("dispatcher" => $eventDispatcher)));
 
-$application = new Application();
+$application = new StandardOptionApplication();
+$application->addStandardOption('config', null, InputOption::VALUE_OPTIONAL, '', 'config.yml');
 $eventDispatcher->notify(new Event('client.application.init', array("application" => $application)));
 
 $application->run();

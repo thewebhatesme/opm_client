@@ -7,7 +7,7 @@ use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Command\Command;
+use Whm\Opm\Client\Console\Command;
 use Whm\Opm\Client\Console\ValidatingDialog;
 
 class SetupConfig extends Command
@@ -22,7 +22,7 @@ class SetupConfig extends Command
 
     protected function configure ()
     {
-        $this->setName('setup:config')->setDescription('Process an url and send the result (har file) to an opm server.');
+        $this->setName('setup:config')->setDescription('Wizard for creating a config file.');
     }
 
     /**

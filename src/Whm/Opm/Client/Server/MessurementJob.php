@@ -1,24 +1,19 @@
 <?php
+
 namespace Whm\Opm\Client\Server;
 
 class MessurementJob
 {
 
-    private $identifier;
+    private $tasks = array ();
 
-    private $urls = array();
-
-    public function __construct($identifier, array $urls) {
-        $this->identifier = $identifier;
-        $this->urls = $urls;
-    }
-
-    public function getUrls() {
-        return $this->urls;
-    }
-
-    public function getIdentifier ()
+    public function addTask (Task $task)
     {
-        return $this->identifier;
+        $this->tasks[] = $task;
+    }
+
+    public function getTasks ()
+    {
+        return $this->tasks;
     }
 }

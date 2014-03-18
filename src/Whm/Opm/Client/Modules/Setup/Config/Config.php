@@ -9,7 +9,7 @@ class Config
 {
 
     /**
-     * @Event("client.application.init")
+     * @Event("kipimoo.client.application.create")
      */
     public function registerCommand (Application $application)
     {
