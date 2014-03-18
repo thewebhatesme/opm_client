@@ -1,5 +1,5 @@
 <?php
-namespace Whm\Opm\Client\Command;
+namespace Whm\Opm\Client\Modules\Setup\PhantomJS\Command;
 
 use Composer\Composer;
 use Composer\Package\Package;

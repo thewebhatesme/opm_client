@@ -8,14 +8,12 @@ class MessurementJob
 
     private $urls = array();
 
-    public function __construct ($identifier, array $urls)
-    {
+    public function __construct($identifier, array $urls) {
         $this->identifier = $identifier;
         $this->urls = $urls;
     }
 
-    public function getUrls ()
-    {
+    public function getUrls() {
         return $this->urls;
     }
 
