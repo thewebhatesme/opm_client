@@ -36,15 +36,14 @@ class Server
     }
 
     /**
-     *
      * @return \Whm\Opm\Client\Server\MessurementJob
      */
     public function getMessurementJob ()
     {
         $messurementJob = new MessurementJob();
 
-        $messurementJob->addTask("1id", "Opm:HttpArchive", Array("url" => "http://www.google.de"));
-        $messurementJob->addTask("2id", "Opm:HttpArchive", Array("url" => "http://www.yahoo.com"));
+        $messurementJob->addTask('1id', 'Opm:HttpArchive', Array('url' => 'http://www.google.de'));
+        $messurementJob->addTask('2id', 'Opm:HttpArchive', Array('url' => 'http://www.yahoo.com'));
 
         return $messurementJob;
     }
@@ -59,7 +58,7 @@ class Server
         // $response = $browser->post($restApi, array(), ($httpArchive));
 
         if ($response->getStatusCode() != '200') {
-            throw new \DomainException("Couldn't connect to server (url: " . $restApi . " | " . $response->getStatusCode() . " - " . $response->getReasonPhrase() . ")");
+            throw new \DomainException('Couldn\'t connect to server (url: ' . $restApi . ' | ' . $response->getStatusCode() . ' - ' . $response->getReasonPhrase() . ')');
         }
     }
 }
