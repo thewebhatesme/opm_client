@@ -7,11 +7,11 @@
  *
  * @package OPMCLient
  */
+
 namespace Whm\Opm\Client\Command;
 
 use Whm\Opm\Client\Messure\MessurementContainer;
 use phmLabs\Components\Annovent\Event\Event;
-use Whm\Opm\Client\Shell\BlockingExecutorQueue;
 use Whm\Opm\Client\Server\Server;
 use Whm\Opm\Client\Config\Config;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -24,89 +24,114 @@ use Whm\Opm\Client\Console\Command;
  *
  * Process an url and send the result (har file) to an opm server
  *
- * @category Command
- * @package OPMClient
- * @license https://raw.github.com/thewebhatesme/opm_server/master/LICENSE
- * @example $./bin/client runMessurement
- * @version GIT: $Id$
- * @since Date: 2014-03-12
- * @author Nils Langner <nils.langner@phmlabs.com>
+ * @category    Command
+ * @package     OPMClient
+ * @license     https://raw.github.com/thewebhatesme/opm_server/master/LICENSE
+ * @example     $./bin/client messure
+ * @version     GIT: $Id$
+ * @since       Date: 2014-03-12
+ * @author      Nils Langner <nils.langner@phmlabs.com>
  */
 class Messure extends Command
 {
 
     /**
-     *
      * @var string Path to config file
      */
     private $configFile;
 
+    /**
+     * @var \Whm\Opm\Client\Config\Config Configuration object 
+     */
     private $config;
 
+    /**
+     * @var \Whm\Opm\Client\Messure\MessurementContainer Object to hold data of messurement
+     */
     private $messurementContainer;
 
     /**
-     *
-     * @var string OPM Server URL
+     * @var \Whm\Opm\Client\Server\Server
      */
     private $server;
 
-    protected function configure ()
-    {
+    /**
+     * {@inheritDoc}
+     */
+    protected function configure() {
         $this->setName('messure')
-            ->setDescription('Run a specified messurement.')
-            ->addArgument('identifier', InputArgument::REQUIRED, 'The task identifier.')
-            ->addArgument('messureType', InputArgument::REQUIRED, 'The messurement type.')
-            ->addArgument('parameters', InputArgument::REQUIRED, 'The parameters.');
+                ->setDescription('Run a specified messurement.')
+                ->addArgument('identifier', InputArgument::REQUIRED, 'The task identifier.')
+                ->addArgument('messureType', InputArgument::REQUIRED, 'The messurement type.')
+                ->addArgument('parameters', InputArgument::REQUIRED, 'The parameters.');
     }
 
     /**
      * Initializes the configuration
      *
-     * @param string $configFile
-     */
-    private function initConfig ($configFile)
-    {
+     * @param   string $configFile Path to config file
+     * @uses    \Whm\Opm\Client\Config\Config::createFromFilet to read configuration
+     * @uses    \phmLabs\Components\Annovent\Event\Event to fire an event
+    */
+    private function initConfig($configFile) {
         $this->configFile = $configFile;
         $this->config = Config::createFromFile($configFile);
-        $this->getEventDispatcher()->notify(new Event('config.create', array("config" => $this->config,"configFileName" => $configFile)));
+        $this->getEventDispatcher()->notify(
+                new Event(
+                'config.create', array("config" => $this->config, "configFileName" => $configFile))
+        );
     }
 
-    private function initMessurementContainer ()
-    {
+    /**
+     * Initialize container to hold the data of the messurement
+     * 
+     * @uses \Whm\Opm\Client\Messure\MessurementContainer
+     * @uses \phmLabs\Components\Annovent\Event\Event to fire an event
+     */
+    private function initMessurementContainer() {
         $this->messurementContainer = new MessurementContainer();
-        $this->getEventDispatcher()->notify(new Event('messure.messurementcontainer.create', array("container" => $this->messurementContainer)));
+        $this->getEventDispatcher()->notify(
+                new Event(
+                'messure.messurementcontainer.create', array('container' => $this->messurementContainer)
+                )
+        );
     }
 
-    private function initServer ()
-    {
+    /**
+     * initialize server and create an event
+     * 
+     * @uses \Whm\Opm\Client\Server\Server
+     * @uses \phmLabs\Components\Annovent\Event\Event to fire an event
+     */
+    private function initServer() {
         $this->server = new Server($this->config);
-        $this->getEventDispatcher()->notify(new Event('server.create', array("server" => $this->server)));
+        $this->getEventDispatcher()->notify(
+                new Event(
+                'server.create', array('server' => $this->server)
+                )
+        );
     }
 
     /**
      * Execute messurement task
      *
-     * @example path description
-     * @param \Symfony\Component\Console\Input\InputInterface $input
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
-     * @throws \Whm\Opm\Client\Command\DomainException
-     *
-     * @return void
+     * @example $./bin/client messure
+     * @param   \Symfony\Component\Console\Input\InputInterface     $input
+     * @param   \Symfony\Component\Console\Output\OutputInterface   $output
      */
-    protected function execute (InputInterface $input, OutputInterface $output)
-    {
+    protected function execute(InputInterface $input, OutputInterface $output) {
         $this->initConfig($input->getOption('config'));
         $this->initMessurementContainer();
         $this->initServer();
 
         $identifier = $input->getArgument('identifier');
         $messureType = $input->getArgument("messureType");
-        $parameters = unserialize($input->getArgument('parameters'));
+        $parameters = \unserialize($input->getArgument('parameters'));
 
         $messureObject = $this->messurementContainer->getMessurement($messureType);
         $result = $messureObject->run($identifier, $parameters);
 
         $this->server->addTaskMessurement($identifier, $result);
     }
+
 }
