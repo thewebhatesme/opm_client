@@ -22,7 +22,6 @@ class MessureTest extends CommandTest
         $command = $application->find('messure');
         $commandTester = new CommandTester($command);
 
-        // @todo test used phpunit as script for messurement
         $commandTester->execute(array('command' => $command->getName(),'--dryrun' => true, 'identifier' => "id1", "messureType" => "Opm:HttpArchive", "parameters" => 'a:1:{s:3:"url";s:20:"http://www.google.de";}'));
 
         $result = $commandTester->getDisplay(true);
