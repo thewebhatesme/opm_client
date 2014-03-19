@@ -50,7 +50,8 @@ class SetupPhantomJS extends Command
 
     protected function configure ()
     {
-        $this->setName('setup:phantomjs')->setDescription('Install the phantomJS binary in the bin folder.');
+        $this->setName('setup:phantomjs')->setDescription('Install the phantomJS binary in the bin folder.')
+             ->addOption('destination', "", InputOption::VALUE_OPTIONAL, "The directory you want phantomJS to be installed");
     }
 
     /**
@@ -75,7 +76,7 @@ class SetupPhantomJS extends Command
 
             $output->writeln('Install the phantomjs binary...');
             Installer::extractArchive($downloadPath, $this->installDir);
-        } catch(\Exception $e) {
+        } catch(\RuntimeException $e) {
             die('An error occured due installation routine' . PHP_EOL . $e->getMessage());
         }
 
