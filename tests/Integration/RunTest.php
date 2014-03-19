@@ -1,12 +1,11 @@
 <?php
 
+namespace Whm\Opm\Client\Test\Integration;
+
 use Whm\Opm\Client\Command\Run;
-
-use Whm\Opm\Client\Console\Application;
-
 use Symfony\Component\Console\Tester\CommandTester;
 
-class RunTest extends PHPUnit_Framework_TestCase
+class MessureTest extends CommandTest
 {
 
     public function setUp ()
@@ -17,9 +16,9 @@ class RunTest extends PHPUnit_Framework_TestCase
         }
     }
 
-    public function testRunMessurement ()
+    public function testRunCommand ()
     {
-        $application = new Application();
+        $application = $this->getApplication();
         $application->add(new Run());
         $command = $application->find('run');
         $commandTester = new CommandTester($command);

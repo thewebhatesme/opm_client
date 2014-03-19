@@ -1,16 +1,16 @@
 <?php
+
+use Whm\Opm\Client\Command\Messure;
+use Whm\Opm\Client\Command\Run;
 use Whm\Opm\Client\Console\Application;
+use Whm\Opm\Client\Modules\ModuleHandler;
 
 use Symfony\Component\Console\Input\InputOption;
-
-use Whm\Opm\Client\Modules\ModuleHandler;
 
 use phmLabs\Components\Annovent\Event\Event;
 use phmLabs\Components\Annovent\Dispatcher;
 
-use Whm\Opm\Client\Command\Messure;
-use Whm\Opm\Client\Command\Run;
-
+// @todo this should be part of the composer.json file
 $loader = include_once __DIR__ . "/../vendor/autoload.php";
 $loader->add("phmLabs", __DIR__ . "/../src/");
 $loader->add("Doctrine", __DIR__ . "/../src/");
@@ -29,7 +29,9 @@ $application->addStandardOption('config', null, InputOption::VALUE_OPTIONAL, '',
 
 $dispatcher->notify(new Event('kipimoo.client.application.create', array("application" => $application)));
 
+// add the default commands
 $application->add(new Run());
 $application->add(new Messure());
 
+// run the application
 $application->run();
