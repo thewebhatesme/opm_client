@@ -4,4 +4,4 @@ opm-client:
     clientid: 12345
     max-parallel-requests: 5
 phantom:
-    executable: /citools/tools/common/phantomjs/1.9.7/bin/phantomjs
+    executable: bin/phantomjs
