@@ -74,7 +74,7 @@ class SetupPhantomJS extends Command
             $output->writeln('Downloading was successfully.');
 
             $output->writeln('Install the phantomjs binary...');
-            Installer::extractArchive($downloadPath, $this->installDir);
+            Installer::extractArchive($downloadPath, trim($this->installDir));
         } catch(\Exception $e) {
             die('An error occured due installation routine' . PHP_EOL . $e->getMessage());
         }
