@@ -109,7 +109,7 @@ class Run extends Command
      */
     private function processJob (MessurementJob $job)
     {
-        $commandPrefix = $_SERVER["_"] . " " . $_SERVER["argv"][0] . " messure ";
+        $commandPrefix = PHP_BINARY . " " . $_SERVER["argv"][0] . " messure ";
 
         $tasks = $job->getTasks();
 

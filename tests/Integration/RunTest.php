@@ -23,6 +23,7 @@ class MessureTest extends CommandTest
         $command = $application->find('run');
         $commandTester = new CommandTester($command);
 
+        // @todo test used phpunit as script for messurement
         $commandTester->execute(array('command' => $command->getName()));
 
         $this->assertTrue(true);
