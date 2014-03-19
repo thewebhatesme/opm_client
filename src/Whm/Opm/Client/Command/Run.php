@@ -9,6 +9,8 @@
  */
 namespace Whm\Opm\Client\Command;
 
+use Whm\Opm\Client\System\Information;
+
 use phmLabs\Components\Annovent\Event\Event;
 use Whm\Opm\Client\Shell\BlockingExecutorQueue;
 use Whm\Opm\Client\Server\MessurementJob;
@@ -120,7 +122,7 @@ class Run extends Command
             $clientExec = $_SERVER["argv"][0];
         }
 
-        $commandPrefix = PHP_BINARY . " " . $clientExec . " messure ";
+        $commandPrefix = Information::getPhpBin() . " " . $clientExec . " messure ";
 
         $tasks = $job->getTasks();
 
