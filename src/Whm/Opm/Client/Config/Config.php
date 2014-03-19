@@ -19,11 +19,11 @@ use Symfony\Component\Yaml\Exception\ParseException;
  *
  * @category Config
  * @package  OPMClient
- * @license    https://raw.github.com/thewebhatesme/opm_server/master/LICENSE
- * @version   GIT: $Id$
- * @since       Date: 2014-01-28
- * @author    Nils Langner <nils.langner@phmlabs.com>
- * @author    André Lademann <andre.lademann@preogrammerq.eu>
+ * @license  https://raw.github.com/thewebhatesme/opm_server/master/LICENSE
+ * @version  GIT: $Id$
+ * @since    Date: 2014-01-28
+ * @author   Nils Langner <nils.langner@phmlabs.com>
+ * @author   André Lademann <andre.lademann@preogrammerq.eu>
  */
 class Config
 {
@@ -45,18 +45,19 @@ class Config
     /**
      * Load configuration data in this object
      *
-     * @param string                        $filePath the yaml file name.
-     * @throws \InvalidArgumentException
-     * @throws \Symfony\Component\Yaml\Exception\ParseException
-     *
-     * @return \Whm\Opm\Client\Config\Config
+     * @param   string $filePath the yaml file name.
+     * @uses    \Symfony\Component\Yaml to parse YAML file and convert in PHP array
+    *
+     * @return  \Whm\Opm\Client\Config\Config
+     * 
+     * @throws  \InvalidArgumentException
+     * @throws  \ParseException
      */
     public static function createFromFile($filePath)
     {
         if (!file_exists($filePath)) {
             throw new \InvalidArgumentException('Configuration file was not found.');
         }
-       $yamlString = file_get_contents($filePath);
         $yaml = new Yaml();
 
         try {
