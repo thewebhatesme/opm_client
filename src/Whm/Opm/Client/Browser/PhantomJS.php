@@ -47,7 +47,7 @@ class PhantomJS
      * Execute the PhantomJS netsniffing script for a given URI
      *
      * @param   array   $parameters for PhantomJS
-     * 
+     *
      * @return  string  shell command
      */
     public function execute (array $parameters)

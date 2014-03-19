@@ -1,4 +1,5 @@
 <?php
+
 namespace Whm\Opm\Client\Modules\Messure\HttpArchive;
 
 use Whm\Opm\Client\Modules\Messure\HttpArchive\Messure\HttpArchive as Messure;
@@ -11,9 +12,18 @@ use Symfony\Component\Console\Application;
 class HttpArchive
 {
 
+    /**
+     * The opm config file.
+     *
+     * @var \Whm\Opm\Client\Config\Config
+     */
     private $config;
 
     /**
+     * Sets the opm config file.
+     *
+     * @param \Whm\Opm\Client\Config\Config $config The config file
+     *
      * @Event("config.create")
      */
     public function setConfig (Config $config)
