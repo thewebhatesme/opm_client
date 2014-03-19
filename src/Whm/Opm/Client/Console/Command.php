@@ -14,6 +14,10 @@ abstract class Command extends SymfonyCommand
         $this->dispatcher = $dispatcher;
     }
 
+    /**
+     *
+     * @return Dispatcher
+     */
     protected function getEventDispatcher ()
     {
         return $this->dispatcher;

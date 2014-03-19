@@ -1,5 +1,4 @@
 <?php
-
 namespace Whm\Opm\Client\Test\Integration;
 
 use Whm\Opm\Client\Command\Run;
@@ -24,8 +23,17 @@ class MessureTest extends CommandTest
         $commandTester = new CommandTester($command);
 
         // @todo test used phpunit as script for messurement
-        $commandTester->execute(array('command' => $command->getName()));
+        $commandTester->execute(array('command' => $command->getName(),'--dryrun' => true));
 
-        $this->assertTrue(true);
+        $expectedOutput[] = "Executing Command: /usr/bin/php /var/www/opm/src/Whm/Opm/Client/Command/../../../../../bin/client.php messure 1id Opm:HttpArchive 'a:1:{s:3:\"url\";s:20:\"http://www.google.de\";}' --config config.yml\n";
+        $expectedOutput[] = "Executing Command: /usr/bin/php /var/www/opm/src/Whm/Opm/Client/Command/../../../../../bin/client.php messure 2id Opm:HttpArchive 'a:1:{s:3:\"url\";s:20:\"http://www.yahoo.com\";}' --config config.yml";
+
+        foreach( $expectedOutput as $line ) {
+            $pos = strpos($commandTester->getDisplay(true), $line);
+            if( $pos === false ) {
+                $this->assertTrue(false, "Command output does not match expected outut.");
+            }
+        }
+
     }
 }

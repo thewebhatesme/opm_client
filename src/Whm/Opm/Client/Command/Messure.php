@@ -7,9 +7,9 @@
  *
  * @package OPMCLient
  */
-
 namespace Whm\Opm\Client\Command;
 
+use Buzz\Browser;
 use Whm\Opm\Client\Messure\MessurementContainer;
 use phmLabs\Components\Annovent\Event\Event;
 use Whm\Opm\Client\Server\Server;
@@ -24,114 +24,121 @@ use Whm\Opm\Client\Console\Command;
  *
  * Process an url and send the result (har file) to an opm server
  *
- * @category    Command
- * @package     OPMClient
- * @license     https://raw.github.com/thewebhatesme/opm_server/master/LICENSE
- * @example     $./bin/client messure
- * @version     GIT: $Id$
- * @since       Date: 2014-03-12
- * @author      Nils Langner <nils.langner@phmlabs.com>
+ * @category Command
+ * @package OPMClient
+ * @license https://raw.github.com/thewebhatesme/opm_server/master/LICENSE
+ * @example $./bin/client messure
+ * @version GIT: $Id$
+ * @since Date: 2014-03-12
+ * @author Nils Langner <nils.langner@phmlabs.com>
  */
 class Messure extends Command
 {
 
     /**
+     *
      * @var string Path to config file
      */
     private $configFile;
 
     /**
-     * @var \Whm\Opm\Client\Config\Config Configuration object 
+     *
+     * @var \Whm\Opm\Client\Config\Config Configuration object
      */
     private $config;
 
     /**
+     *
      * @var \Whm\Opm\Client\Messure\MessurementContainer Object to hold data of messurement
      */
     private $messurementContainer;
 
     /**
+     *
      * @var \Whm\Opm\Client\Server\Server
      */
     private $server;
 
+    private $dryrun;
+
     /**
      * {@inheritDoc}
      */
-    protected function configure() {
+    protected function configure ()
+    {
         $this->setName('messure')
-                ->setDescription('Run a specified messurement.')
-                ->addArgument('identifier', InputArgument::REQUIRED, 'The task identifier.')
-                ->addArgument('messureType', InputArgument::REQUIRED, 'The messurement type.')
-                ->addArgument('parameters', InputArgument::REQUIRED, 'The parameters.');
+            ->setDescription('Run a specified messurement.')
+            ->addArgument('identifier', InputArgument::REQUIRED, 'The task identifier.')
+            ->addArgument('messureType', InputArgument::REQUIRED, 'The messurement type.')
+            ->addArgument('parameters', InputArgument::REQUIRED, 'The parameters.');
     }
 
     /**
      * Initializes the configuration
      *
-     * @param   string $configFile Path to config file
-     * @uses    \Whm\Opm\Client\Config\Config::createFromFilet to read configuration
-     * @uses    \phmLabs\Components\Annovent\Event\Event to fire an event
-    */
-    private function initConfig($configFile) {
+     * @param string $configFile Path to config file
+     * @uses \Whm\Opm\Client\Config\Config::createFromFilet to read configuration
+     * @uses \phmLabs\Components\Annovent\Event\Event to fire an event
+     */
+    private function initConfig ($configFile)
+    {
         $this->configFile = $configFile;
         $this->config = Config::createFromFile($configFile);
-        $this->getEventDispatcher()->notify(
-                new Event(
-                'config.create', array("config" => $this->config, "configFileName" => $configFile))
-        );
+        $this->getEventDispatcher()->notify(new Event('config.create', array("config" => $this->config,"configFileName" => $configFile)));
     }
 
     /**
      * Initialize container to hold the data of the messurement
-     * 
+     *
      * @uses \Whm\Opm\Client\Messure\MessurementContainer
      * @uses \phmLabs\Components\Annovent\Event\Event to fire an event
      */
-    private function initMessurementContainer() {
+    private function initMessurementContainer ()
+    {
         $this->messurementContainer = new MessurementContainer();
-        $this->getEventDispatcher()->notify(
-                new Event(
-                'messure.messurementcontainer.create', array('container' => $this->messurementContainer)
-                )
-        );
+        $this->getEventDispatcher()->notify(new Event('messure.messurementcontainer.create', array('container' => $this->messurementContainer)));
     }
 
     /**
      * initialize server and create an event
-     * 
+     *
      * @uses \Whm\Opm\Client\Server\Server
      * @uses \phmLabs\Components\Annovent\Event\Event to fire an event
      */
-    private function initServer() {
-        $this->server = new Server($this->config);
-        $this->getEventDispatcher()->notify(
-                new Event(
-                'server.create', array('server' => $this->server)
-                )
-        );
+    private function initServer ()
+    {
+        $browser = new Browser();
+        $this->server = new Server($this->config, $browser);
+        $this->getEventDispatcher()->notify(new Event('server.create', array('server' => $this->server)));
     }
 
     /**
      * Execute messurement task
      *
      * @example $./bin/client messure
-     * @param   \Symfony\Component\Console\Input\InputInterface     $input
-     * @param   \Symfony\Component\Console\Output\OutputInterface   $output
+     * @param \Symfony\Component\Console\Input\InputInterface $input
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
      */
-    protected function execute(InputInterface $input, OutputInterface $output) {
+    protected function execute (InputInterface $input, OutputInterface $output)
+    {
+        $this->dryrun = $input->getOption('dryrun');
+
         $this->initConfig($input->getOption('config'));
         $this->initMessurementContainer();
         $this->initServer();
 
         $identifier = $input->getArgument('identifier');
         $messureType = $input->getArgument("messureType");
-        $parameters = \unserialize($input->getArgument('parameters'));
+        $parameters =\unserialize($input->getArgument('parameters'));
 
         $messureObject = $this->messurementContainer->getMessurement($messureType);
         $result = $messureObject->run($identifier, $parameters);
 
-        $this->server->addTaskMessurement($identifier, $result);
+        if ($this->dryrun) {
+            $output->writeln("Identifier: " . $identifier);
+            $output->writeln("Result: " . $result);
+        } else {
+            $this->server->addTaskMessurement($identifier, $result);
+        }
     }
-
 }

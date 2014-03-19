@@ -15,24 +15,12 @@ class Server
 
     private $config;
 
-    public function __construct (Config $config)
+    public function __construct (Config $config, Browser $browser)
     {
         $this->config = $config;
         $this->host = $this->config->getOpmServer();
         $this->clientId = $this->config->getClientId();
-    }
-
-    public function setBrowser (Browser $browser)
-    {
         $this->browser = $browser;
-    }
-
-    private function getBrowser ()
-    {
-        if (is_null($this->browser)) {
-            $this->browser = new Browser();
-        }
-        return $this->browser;
     }
 
     /**
@@ -50,7 +38,7 @@ class Server
 
     public function addTaskMessurement ($identifier, $result)
     {
-        $browser = $this->getBrowser();
+        $browser = $this->browser;
 
         $restApi = $this->host . '/add/' . $this->clientId . '/' . $identifier . '/';
 

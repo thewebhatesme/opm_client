@@ -25,7 +25,8 @@ $dispatcher->connectListeners(ModuleHandler::getModules());
 // create the application
 $application = new Application();
 $application->setEventDispatcher($dispatcher);
-$application->addStandardOption('config', null, InputOption::VALUE_OPTIONAL, '', 'config.yml');
+$application->addStandardOption('config', null, InputOption::VALUE_OPTIONAL, 'The config file.', 'config.yml');
+$application->addStandardOption('dryrun', null, InputOption::VALUE_NONE, 'If set the run will not send data to the server.');
 
 $dispatcher->notify(new Event('kipimoo.client.application.create', array("application" => $application)));
 

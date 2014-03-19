@@ -23,6 +23,11 @@ class HttpArchive implements Messurement
 
     public function run ($identifier, array $parameters)
     {
+        $phantomJSBin = $this->config->getPhantomExecutable();
+        if( !is_file($phantomJSBin)) {
+            throw new \RuntimeException("PhantomJS binaries not found. Please check your config file or run the setup:phatomjs command.");
+        }
+
         $phantom = new PhantomJS($this->config->getPhantomExecutable());
         $netsniffScript = __DIR__."/../CasperJS/netsniff.js";
 

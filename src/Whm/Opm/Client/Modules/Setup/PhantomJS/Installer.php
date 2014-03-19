@@ -9,7 +9,7 @@
 
 namespace Whm\Opm\Client\Modules\Setup\PhantomJS;
 
-use PhantomInstaller\Installer;
+use PhantomInstaller\Installer as PhantomInstaller;
 
 /**
  * Class PhantomJSInstaller
@@ -24,7 +24,7 @@ use PhantomInstaller\Installer;
  * @since    2014-01-28
  * @author   Philipp Bräutigam <philipp.braeutigam@googlemail.com>
  */
-class Installer extends Installer
+class Installer extends PhantomInstaller
 {
     /**
      * Download the archive and extract it to the defined folder

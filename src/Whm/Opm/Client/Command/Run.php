@@ -9,10 +9,14 @@
  */
 namespace Whm\Opm\Client\Command;
 
+use Buzz\Browser;
+
+use Whm\Opm\Client\Shell\ExecutorQueue\DebugExecutorQueue;
+use Whm\Opm\Client\Shell\ExecutorQueue\BlockingExecutorQueue;
+
 use Whm\Opm\Client\System\Information;
 
 use phmLabs\Components\Annovent\Event\Event;
-use Whm\Opm\Client\Shell\BlockingExecutorQueue;
 use Whm\Opm\Client\Server\MessurementJob;
 use Whm\Opm\Client\Server\Server;
 use Whm\Opm\Client\Config\Config;
@@ -59,6 +63,10 @@ class Run extends Command
 
     private $configFile;
 
+    private $output;
+
+    private $isDryRun = false;
+
     /**
      * {@inheritDoc}
      */
@@ -87,7 +95,9 @@ class Run extends Command
      */
     private function initServer ()
     {
-        $this->server = new Server($this->config);
+        $browser = new Browser();
+        $this->server = new Server($this->config, $browser);
+        $this->getEventDispatcher()->notify(new Event('server.create', array('server' => $this->server)));
     }
 
     /**
@@ -103,9 +113,19 @@ class Run extends Command
         $this->initConfig($input->getOption('config'));
         $this->initServer();
 
-        $this->blockingExecutorQueue = new BlockingExecutorQueue($this->config->getMaxParallelRequests());
+        $this->output = $output;
+        $this->isDryRun = $input->getOption('dryrun');
 
         $this->processJob($this->server->getMessurementJob());
+    }
+
+    private function getExecutorQueue()
+    {
+        if( $this->isDryRun) {
+            return new DebugExecutorQueue();
+        }else{
+            return new BlockingExecutorQueue($this->config->getMaxParallelRequests());
+        }
     }
 
     /**
@@ -124,14 +144,15 @@ class Run extends Command
 
         $commandPrefix = Information::getPhpBin() . " " . $clientExec . " messure ";
 
-        $tasks = $job->getTasks();
+        $blockingQueue = $this->getExecutorQueue();
 
+        $tasks = $job->getTasks();
         foreach ($tasks as $identifier => $task) {
             $command = $commandPrefix . $identifier . " " . $task["type"] . " '" . $task["parameters"] . "' --config " . $this->configFile;
-
-            $this->blockingExecutorQueue->addCommand($command);
+            $blockingQueue->addCommand($command);
         }
 
-        $this->blockingExecutorQueue->run();
+        $blockingQueue->run();
+        $this->output->writeln($blockingQueue->getOutput());
     }
 }
