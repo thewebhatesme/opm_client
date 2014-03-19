@@ -2,12 +2,11 @@
 
 namespace Whm\Opm\Client\Modules\Messure\HttpArchive;
 
-use Whm\Opm\Client\Modules\Messure\HttpArchive\Messure\HttpArchive as Messure;
+use Whm\Opm\Client\Command\Messure;
+
 use Whm\Opm\Client\Messure\MessurementContainer;
 use Whm\Opm\Client\Config\Config;
-use Whm\Opm\Client\Messure\Messurement;
 use Whm\Opm\Client\Modules\Messure\HttpArchive\Command\ProcessUrl;
-use Symfony\Component\Console\Application;
 
 class HttpArchive
 {
