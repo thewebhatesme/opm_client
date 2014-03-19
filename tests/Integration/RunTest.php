@@ -22,7 +22,6 @@ class RunTest extends CommandTest
         $command = $application->find('run');
         $commandTester = new CommandTester($command);
 
-        // @todo test used phpunit as script for messurement
         $commandTester->execute(array('command' => $command->getName(),'--dryrun' => true));
 
         $expectedOutput[] = "Executing Command: /usr/bin/php /var/www/opm/src/Whm/Opm/Client/Command/../../../../../bin/client.php messure 1id Opm:HttpArchive 'a:1:{s:3:\"url\";s:20:\"http://www.google.de\";}' --config config.yml\n";
