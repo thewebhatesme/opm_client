@@ -71,7 +71,7 @@ class Run extends Command
     {
         $this->configFile = $configFile;
         $this->config = Config::createFromFile($configFile);
-        $this->getEventDispatcher()->notify(new Event('run.config.create', array("config" => $this->config,"configFileName" => $configFile)));
+        $this->getEventDispatcher()->notify(new Event('run.config.create', array ("config" => $this->config, "configFileName" => $configFile)));
     }
 
     private function initServer ()
@@ -109,12 +109,19 @@ class Run extends Command
      */
     private function processJob (MessurementJob $job)
     {
-        $commandPrefix = PHP_BINARY . " " . $_SERVER["argv"][0] . " messure ";
+        // @todo this is ugly
+        if (strpos($_SERVER["argv"][0], "phpunit") > 0) {
+            $clientExec = __DIR__ . "/../../../../../bin/client.php";
+        } else {
+            $clientExec = $_SERVER["argv"][0];
+        }
+
+        $commandPrefix = PHP_BINARY . " " . $clientExec . " messure ";
 
         $tasks = $job->getTasks();
 
         foreach ($tasks as $identifier => $task) {
-            $command = $commandPrefix . $identifier . " " . $task["type"] . " '" . $task["parameters"] . "' --config ".$this->configFile;
+            $command = $commandPrefix . $identifier . " " . $task["type"] . " '" . $task["parameters"] . "' --config " . $this->configFile;
             $this->blockingExecutorQueue->addCommand($command);
         }
 
