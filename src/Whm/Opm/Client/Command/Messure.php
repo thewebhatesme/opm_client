@@ -129,7 +129,7 @@ class Messure extends Command
 
         $identifier = $input->getArgument('identifier');
         $messureType = $input->getArgument("messureType");
-        $parameters =\unserialize($input->getArgument('parameters'));
+        $parameters = unserialize($input->getArgument('parameters'));
 
         $messureObject = $this->messurementContainer->getMessurement($messureType);
         $result = $messureObject->run($identifier, $parameters);
