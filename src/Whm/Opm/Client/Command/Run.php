@@ -26,7 +26,7 @@ use \Whm\Opm\Client\Console\Command;
  * @category Command
  * @package OPMClient
  * @license https://raw.github.com/thewebhatesme/opm_server/master/LICENSE
- * @example $./bin/client runMessurement
+ * @example $./bin/client run
  * @version GIT: $Id$
  * @since Date: 2014-03-12
  * @author Nils Langner <nils.langner@phmlabs.com>
@@ -57,6 +57,9 @@ class Run extends Command
 
     private $configFile;
 
+    /**
+     * {@inheritDoc}
+     */
     protected function configure ()
     {
         $this->setName('run')->setDescription('Connect to server and run a messurement job.');
@@ -65,7 +68,9 @@ class Run extends Command
     /**
      * Initializes the configuration
      *
-     * @param string $configFile
+     * @param string $configFile path to config file
+     * @uses \Whm\Opm\Client\Server\Server
+     * @uses \phmLabs\Components\Annovent\Event\Event to fire an event
      */
     private function initConfig ($configFile)
     {
@@ -74,6 +79,10 @@ class Run extends Command
         $this->getEventDispatcher()->notify(new Event('run.config.create', array ("config" => $this->config, "configFileName" => $configFile)));
     }
 
+    /**
+     *
+     * @uses \Whm\Opm\Client\Server\Server
+     */
     private function initServer ()
     {
         $this->server = new Server($this->config);
@@ -82,12 +91,10 @@ class Run extends Command
     /**
      * Execute messurement task
      *
-     * @example path description
+     * @example $ bin/client.php run
      * @param \Symfony\Component\Console\Input\InputInterface $input
      * @param \Symfony\Component\Console\Output\OutputInterface $output
-     * @throws \Whm\Opm\Client\Command\DomainException
-     *
-     * @return void
+     * @uses \Whm\Opm\Client\Shell\BlockingExecutorQueue
      */
     protected function execute (InputInterface $input, OutputInterface $output)
     {
@@ -100,12 +107,9 @@ class Run extends Command
     }
 
     /**
-     * process the job
+     * Process the job
      *
      * @param \Whm\Opm\Client\Server\MessurementJob $job
-     * @todo Use *\Whm\Opm\Client\Config* object to build the cli command
-     *
-     * @return void
      */
     private function processJob (MessurementJob $job)
     {
@@ -122,6 +126,7 @@ class Run extends Command
 
         foreach ($tasks as $identifier => $task) {
             $command = $commandPrefix . $identifier . " " . $task["type"] . " '" . $task["parameters"] . "' --config " . $this->configFile;
+
             $this->blockingExecutorQueue->addCommand($command);
         }
 
