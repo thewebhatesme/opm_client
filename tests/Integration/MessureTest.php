@@ -7,14 +7,6 @@ use Symfony\Component\Console\Tester\CommandTester;
 class MessureTest extends CommandTest
 {
 
-    public function setUp ()
-    {
-        $configfile = __DIR__ . "/../../config.yml";
-        if (! file_exists($configfile)) {
-            copy(__DIR__ . "/fixtures/config.yml", $configfile);
-        }
-    }
-
     public function testMessureCommand ()
     {
         $application = $this->getApplication();
