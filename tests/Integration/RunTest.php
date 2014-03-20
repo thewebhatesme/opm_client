@@ -32,7 +32,7 @@ class RunTest extends CommandTest
         foreach ($expectedOutput as $line) {
             $pos = strpos($result, $line);
             if ($pos === false) {
-                $this->assertTrue(false, "Command output does not match expected outut.\nExpected: ". $line);
+                $this->assertTrue(false, "Command output does not match expected outut.\nExpected: ". $line."\nCurrent: ".$result);
             }
         }
     }
