@@ -13,7 +13,7 @@ class HttpStatusOk
      */
     public function register (MessurementContainer $container)
     {
-        $messure = new \Whm\Opm\Client\Modules\Messure\HttpArchive\Messure\HttpStatusOk($this->config);
+        $messure = new \Whm\Opm\Client\Modules\Messure\HttpStatusOk\Messure\HttpStatusOk($this->config);
         $container->addMessurement($messure);
     }
 }
