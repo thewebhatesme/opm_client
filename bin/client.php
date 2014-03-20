@@ -20,7 +20,9 @@ $loader->add("Whm", __DIR__ . "/../src/");
 $dispatcher = new Dispatcher();
 
 // register modules
-$dispatcher->connectListeners(ModuleHandler::getModules());
+foreach (ModuleHandler::getModules() as $module) {
+    $dispatcher->connectListener($module);
+}
 
 // create the application
 $application = new Application();

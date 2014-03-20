@@ -15,7 +15,9 @@ abstract class CommandTest extends \PHPUnit_Framework_TestCase
         $application = new Application();
         $dispatcher = new Dispatcher();
 
-        $dispatcher->connectListeners(ModuleHandler::getModules());
+        foreach (ModuleHandler::getModules() as $module) {
+            $dispatcher->connectListener($module);
+        }
 
         $application->setEventDispatcher($dispatcher);
         $application->addStandardOption('config', null, InputOption::VALUE_OPTIONAL, '', __DIR__.'/fixtures/config.yml');
