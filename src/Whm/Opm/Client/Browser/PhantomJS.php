@@ -14,14 +14,14 @@ namespace Whm\Opm\Client\Browser;
  *
  * Uses the headless WebKit browser *PhantomJS* to collect data on the performance of a website.
  *
- * @category    Browser
- * @package     OPMClient
- * @license     https://raw.github.com/thewebhatesme/opm_server/master/LICENSE
- * @example     $./bin/client setup:phantomjs
- * @version     GIT: $Id$
- * @since       Date: 2014-01-28
- * @author      Nils Langner <nils.langner@phmlabs.com>
- * @link        http://phantomjs.org/network-monitoring.html PhantomJS network monitoring documentation
+ * @category Browser
+ * @package OPMClient
+ * @license https://raw.github.com/thewebhatesme/opm_server/master/LICENSE
+ * @example $./bin/client setup:phantomjs
+ * @version GIT: $Id$
+ * @since Date: 2014-01-28
+ * @author Nils Langner <nils.langner@phmlabs.com>
+ * @link http://phantomjs.org/network-monitoring.html PhantomJS network monitoring documentation
  */
 class PhantomJS
 {
@@ -46,9 +46,9 @@ class PhantomJS
     /**
      * Execute the PhantomJS netsniffing script for a given URI
      *
-     * @param   array   $parameters for PhantomJS
+     * @param array $parameters for PhantomJS
      *
-     * @return  string  shell command
+     * @return string shell command
      */
     public function execute (array $parameters)
     {

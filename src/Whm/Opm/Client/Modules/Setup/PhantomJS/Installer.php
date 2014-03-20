@@ -75,8 +75,9 @@ class Installer extends PhantomInstaller
         // Move the files to the defined installation directory
         $unusedFileExtensions = array('.zip', '.tar', '.bz2');
         $fileName = str_replace($unusedFileExtensions, '', $phantomArchive);
+
         if(!rename('.' . DIRECTORY_SEPARATOR . 'install' . DIRECTORY_SEPARATOR . $fileName . DIRECTORY_SEPARATOR . 'bin' . DIRECTORY_SEPARATOR . 'phantomjs',
-                    './bin/phantomjs')) {
+                $installDir . DIRECTORY_SEPARATOR . 'phantomjs')) {
             throw new \Exception('Installation of the phantomjs binary failed.');
         }
 
