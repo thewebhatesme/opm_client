@@ -24,8 +24,8 @@ class RunTest extends CommandTest
 
         $commandTester->execute(array('command' => $command->getName(),'--dryrun' => true));
 
-        $expectedOutput[] = "Executing Command: /usr/bin/php /var/www/opm/src/Whm/Opm/Client/Command/../../../../../bin/client.php messure 1id Opm:HttpArchive 'a:1:{s:3:\"url\";s:20:\"http://www.google.de\";}' --config config.yml\n";
-        $expectedOutput[] = "Executing Command: /usr/bin/php /var/www/opm/src/Whm/Opm/Client/Command/../../../../../bin/client.php messure 2id Opm:HttpArchive 'a:1:{s:3:\"url\";s:20:\"http://www.yahoo.com\";}' --config config.yml";
+        $expectedOutput[] = "bin/client.php messure 1id Opm:HttpArchive 'a:1:{s:3:\"url\";s:20:\"http://www.google.de\";}' --config config.yml\n";
+        $expectedOutput[] = "bin/client.php messure 2id Opm:HttpArchive 'a:1:{s:3:\"url\";s:20:\"http://www.yahoo.com\";}' --config config.yml";
 
         $result = $commandTester->getDisplay(true);
 
