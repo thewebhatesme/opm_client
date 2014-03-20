@@ -1,10 +1,12 @@
 <?php
-namespace Whm\Opm\Client\Test\Integration;
+namespace Whm\Opm\Client\Test\Integration\Messure;
+
+use Whm\Opm\Client\Test\Integration\CommandTest;
 
 use Whm\Opm\Client\Command\Messure;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class MessureTest extends CommandTest
+class HttpArchiveTest extends CommandTest
 {
 
     public function setUp ()
@@ -36,7 +38,7 @@ class MessureTest extends CommandTest
         foreach ($expectedOutput as $line) {
             $pos = strpos($result, $line);
             if ($pos === false) {
-                $this->assertTrue(false, "Command output does not match expected outut.\nExpected: ". $line."\nCurrent: ".$result);
+                $this->assertTrue(false, "Command output does not match expected output. \nExpected: ". $line);
             }
         }
     }

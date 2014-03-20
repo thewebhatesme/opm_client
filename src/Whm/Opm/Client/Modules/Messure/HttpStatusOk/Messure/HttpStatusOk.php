@@ -1,6 +1,6 @@
 <?php
 
-namespace Whm\Opm\Client\Modules\Messure\HttpArchive\Messure;
+namespace Whm\Opm\Client\Modules\Messure\HttpStatusOk\Messure;
 
 use Buzz\Browser;
 
