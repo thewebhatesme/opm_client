@@ -6,6 +6,6 @@ php:
 
 before_script:
   - composer install
-  - php bin/client.php setup:phantom --destination ./bin/
+  - php bin/client.php setup:phantomjs --destination ./bin/
 
 script: phpunit --coverage-text --bootstrap tests/bootstrap.php tests
