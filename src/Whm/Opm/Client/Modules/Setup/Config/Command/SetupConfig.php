@@ -54,11 +54,11 @@ class SetupConfig extends Command
         $dialog = new ValidatingDialog($this->getHelperSet()->get('dialog'), $output);
 
         $clientId = $dialog->ask("Please enter your client id: ", new Length(5)) . "\n";
-        $phantom = $dialog->ask("Please enter path to your phantomjs executable: ", new File());
+        $phantomjs = $dialog->ask("Please enter path to your phantomjs executable: ", new File());
         $server = $dialog->ask("Please enter the server address (press enter for http://www.linkstream.org): ", new Url(), false, "http://www.linkstream.org");
         $maxConnections = $dialog->ask("Please enter the number of max. connections (press enter for default: 5): ", new Range(array("min" => 1,"max" => 10)), false, 5);
 
-        $this->createConfigFile($server, $phantom, $maxConnections, $clientId);
+        $this->createConfigFile($server, $phantomjs, $maxConnections, $clientId);
 
         $output->writeln("\n<info> Config (" . $this->configFileName . ") was created.</info>\n");
 
