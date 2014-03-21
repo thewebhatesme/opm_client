@@ -76,14 +76,15 @@ class Installer extends PhantomInstaller
         $unusedFileExtensions = array('.zip', '.tar', '.bz2');
         $fileName = str_replace($unusedFileExtensions, '', $phantomArchive);
 
+        if(!is_dir($installDir)) {
+            if(!mkdir($installDir, 0777, true)) {
+                throw new \Exception('Creating installation folder failed. Check your system requirements');
+            }
+        }
+
         if(!rename('.' . DIRECTORY_SEPARATOR . 'install' . DIRECTORY_SEPARATOR . $fileName . DIRECTORY_SEPARATOR . 'bin' . DIRECTORY_SEPARATOR . 'phantomjs',
                 $installDir . DIRECTORY_SEPARATOR . 'phantomjs')) {
             throw new \Exception('Installation of the phantomjs binary failed.');
-        }
-
-        if(!rename('.' . DIRECTORY_SEPARATOR . 'install' . DIRECTORY_SEPARATOR . $fileName . DIRECTORY_SEPARATOR . 'examples',
-                './examples')) {
-            throw new \Exception('Installation of the phantomjs netsniff.js script failed.');
         }
 
         return true;
