@@ -23,7 +23,7 @@ use Symfony\Component\Yaml\Exception\ParseException;
  * @version  GIT: $Id$
  * @since    Date: 2014-01-28
  * @author   Nils Langner <nils.langner@phmlabs.com>
- * @author   André Lademann <andre.lademann@preogrammerq.eu>
+ * @author   André Lademann <andre.lademann@programmerq.eu>
  */
 class Config
 {
@@ -60,12 +60,16 @@ class Config
         }
         $yaml = new Yaml();
 
+        if (!$fileContent = file_get_contents($filePath)) {
+            throw new \Exception('File has not content.');
+        }
+
         try {
-            $valueArray = $yaml->parse(file_get_contents($filePath));
+            $valueArray = $yaml->parse($fileContent);
         } catch (ParseException $e) {
             throw $e;
         }
-
+        
         return new self($valueArray);
     }
 

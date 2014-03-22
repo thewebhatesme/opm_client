@@ -1,0 +1,8 @@
+opm-server:
+    host: http://lagfolk.de
+opm-client:
+    clientid: asdf
+      - Fail
+    max-parallel-requests: 5
+phantom:
+    executable: /usr/bin/phantomjs

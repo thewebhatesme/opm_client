@@ -2,12 +2,12 @@
 .idea
 .project
 .settings/
+/config.yml
 /docs
 /nbproject
 /vendor
 box.phar
 client.phar
-/config.yml
 composer.lock
 phantomjs
 examples/
