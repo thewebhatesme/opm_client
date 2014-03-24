@@ -1,15 +1,41 @@
 {
+    "name": "thewebhatesme/opm-client",
     "autoload": {
-        "psr-0": {"Whm": "src/"},
-        "psr-0": {"Doctrine": "src/"},
-        "psr-0": {"phmLabs": "src/"}
+        "psr-0": {"Whm\\": "src/"}
     },
-
+    "repositories": [
+        {
+            "type": "package",
+            "package": {
+                "name": "phmlabs/annovent",
+                "version": "0.1.0",
+                "dist": {
+                    "url": "https://github.com/phmLabs/Annovent/archive/master.zip",
+                    "type": "zip"
+                },
+                "source": {
+                    "url": "https://github.com/phmLabs/Annovent",
+                    "type": "git",
+                    "reference": "master"
+                },
+                "autoload": {
+                    "psr-0": {
+                        "phmLabs\\": "",
+                        "Doctrine\\Common": ""
+                    }
+                }
+            }
+        }
+    ],
     "require": {
         "kriswallsmith/buzz": ">=0.6",
-        "symfony/yaml": "v2.4.2",
-        "symfony/console": "v2.4.2",
-        "symfony/validator": "v2.4.2",
-        "jakoch/phantomjs-installer": "1.9.7"
+        "symfony/yaml": "~2.4.2",
+        "symfony/console": "~2.4.2",
+        "symfony/validator": "~2.4.2",
+        "jakoch/phantomjs-installer": "~1.9.7",
+        "phmlabs/annovent": "~0.1.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~3.7.3"
     }
 }

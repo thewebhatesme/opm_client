@@ -8,6 +8,5 @@
 box.phar
 client.phar
 /config.yml
-composer.lock
 phantomjs
 examples/
