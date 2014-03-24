@@ -9,6 +9,8 @@
  */
 namespace Whm\Opm\Client\Command;
 
+use Whm\Opm\Client\Server\MessurementResult;
+
 use Buzz\Browser;
 use Whm\Opm\Client\Messure\MessurementContainer;
 use phmLabs\Components\Annovent\Event\Event;
@@ -132,13 +134,22 @@ class Messure extends Command
         $parameters = unserialize($input->getArgument('parameters'));
 
         $messureObject = $this->messurementContainer->getMessurement($messureType);
-        $result = $messureObject->run($identifier, $parameters);
+        $metrics = $this->messurementContainer->getMetrics($messureType);
+
+        $messurementResult = new MessurementResult();
+        $rawData = $messureObject->run($identifier, $parameters);
+        $messurementResult->setMessurementRawData($rawData);
+
+        foreach( $metrics as $metric ) {
+            $metricValue = $metric->calculateMetric($rawData);
+            $messurementResult->addMetric($metric->getName(), $metricValue);
+        }
 
         if ($this->dryrun) {
             $output->writeln("Identifier: " . $identifier);
-            $output->writeln("Result: " . $result);
+            $output->writeln("Result: " . $rawData);
         } else {
-            $this->server->addTaskMessurement($identifier, $result);
+            $this->server->addTaskMessurement($identifier, $rawData);
         }
     }
 }
