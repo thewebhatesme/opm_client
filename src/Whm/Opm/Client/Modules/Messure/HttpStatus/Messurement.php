@@ -1,17 +1,11 @@
 <?php
 
-namespace Whm\Opm\Client\Modules\Messure\HttpStatusOk\Messure;
+namespace Whm\Opm\Client\Modules\Messure\HttpStatus;
 
 use Buzz\Browser;
+use Whm\Opm\Client\Messure\Messurement as MessurementInterface;
 
-use Symfony\Component\Console\Output\BufferedOutput;
-
-use Whm\Opm\Client\Browser\PhantomJS;
-
-use Whm\Opm\Client\Config\Config;
-use Whm\Opm\Client\Messure\Messurement;
-
-class HttpStatusOk implements Messurement
+class Messurement implements MessurementInterface
 {
     public function getType ()
     {

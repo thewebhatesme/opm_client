@@ -7,8 +7,8 @@ class ModuleHandler
 
     static public function getModules ()
     {
-        $modules = array ("Whm\Opm\Client\Modules\Messure\HttpArchive\Listener", "Whm\Opm\Client\Modules\Setup\PhantomJS\PhantomJS", "Whm\Opm\Client\Modules\Setup\Config\Config",
-                "Whm\Opm\Client\Modules\Messure\HttpStatusOk\Listener");
+        $modules = array ("Whm\Opm\Client\Modules\Messure\HttpArchive\Listener", "Whm\Opm\Client\Modules\Setup\PhantomJs\Listener", "Whm\Opm\Client\Modules\Setup\Config\Listener",
+                "Whm\Opm\Client\Modules\Messure\HttpStatus\Listener");
 
         foreach ($modules as $module) {
             $moduleObjects[] = new $module();

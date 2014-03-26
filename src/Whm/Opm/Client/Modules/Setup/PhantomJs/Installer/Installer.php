@@ -7,7 +7,7 @@
  * @package OPMCLient
  */
 
-namespace Whm\Opm\Client\Modules\Setup\PhantomJS;
+namespace Whm\Opm\Client\Modules\Setup\PhantomJs\Installer;
 
 use PhantomInstaller\Installer as PhantomInstaller;
 

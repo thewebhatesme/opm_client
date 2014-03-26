@@ -1,11 +1,11 @@
 <?php
-namespace Whm\Opm\Client\Modules\Setup\Config;
+
+namespace Whm\Opm\Client\Modules\Setup\PhantomJs;
 
 use Whm\Opm\Client\Modules\Setup\Config\Command\SetupConfig;
-
 use Symfony\Component\Console\Application;
 
-class Config
+class Listener
 {
 
     /**
@@ -13,6 +13,6 @@ class Config
      */
     public function registerCommand (Application $application)
     {
-        $application->add(new SetupConfig());
+        $application->add(new Command());
     }
 }

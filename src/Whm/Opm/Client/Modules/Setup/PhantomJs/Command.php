@@ -1,7 +1,6 @@
 <?php
-namespace Whm\Opm\Client\Modules\Setup\PhantomJS\Command;
+namespace Whm\Opm\Client\Modules\Setup\PhantomJs;
 
-use Whm\Opm\Client\Modules\Setup\PhantomJS\Installer;
 
 /**
  * This file is part of the Open Performance Monitor Client package
@@ -14,8 +13,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
-use Whm\Opm\Client\Console\Command;
+use Whm\Opm\Client\Console\Command as DefaultCommand;
 use Symfony\Component\Validator\Constraints\NotNull;
+use Whm\Opm\Client\Modules\Setup\PhantomJs\Installer\Installer;
 use Whm\Opm\Client\Console\ValidatingDialog;
 
 /**
@@ -31,7 +31,7 @@ use Whm\Opm\Client\Console\ValidatingDialog;
  * @since 2014-01-28
  * @author Philipp Bräutigam <philipp.braeutigam@googlemail.com>
  */
-class SetupPhantomJS extends Command
+class Command extends DefaultCommand
 {
 
     /**
