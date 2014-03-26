@@ -3,8 +3,127 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "10a5c003816c2643bc9df2cacde58c56",
+    "hash": "17f7df608fb04bb099b5ba8953bb4a69",
     "packages": [
+        {
+            "name": "doctrine/annotations",
+            "version": "v1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/doctrine/annotations.git",
+                "reference": "fae359b3efd908e407a0105ff8956b5c94ddca8e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/doctrine/annotations/zipball/fae359b3efd908e407a0105ff8956b5c94ddca8e",
+                "reference": "fae359b3efd908e407a0105ff8956b5c94ddca8e",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/lexer": "1.*",
+                "php": ">=5.3.2"
+            },
+            "require-dev": {
+                "doctrine/cache": "1.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Doctrine\\Common\\Annotations\\": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jonathan H. Wage",
+                    "email": "jonwage@gmail.com",
+                    "homepage": "http://www.jwage.com/",
+                    "role": "Creator"
+                },
+                {
+                    "name": "Guilherme Blanco",
+                    "email": "guilhermeblanco@gmail.com",
+                    "homepage": "http://www.instaclick.com"
+                },
+                {
+                    "name": "Roman Borschel",
+                    "email": "roman@code-factory.org"
+                },
+                {
+                    "name": "Benjamin Eberlei",
+                    "email": "kontakt@beberlei.de"
+                },
+                {
+                    "name": "Johannes Schmitt",
+                    "email": "schmittjoh@gmail.com",
+                    "homepage": "http://jmsyst.com",
+                    "role": "Developer of wrapped JMSSerializerBundle"
+                }
+            ],
+            "description": "Docblock Annotations Parser",
+            "homepage": "http://www.doctrine-project.org",
+            "keywords": [
+                "annotations",
+                "docblock",
+                "parser"
+            ],
+            "time": "2013-01-12 19:23:32"
+        },
+        {
+            "name": "doctrine/lexer",
+            "version": "v1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/doctrine/lexer.git",
+                "reference": "2f708a85bb3aab5d99dab8be435abd73e0b18acb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/doctrine/lexer/zipball/2f708a85bb3aab5d99dab8be435abd73e0b18acb",
+                "reference": "2f708a85bb3aab5d99dab8be435abd73e0b18acb",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Doctrine\\Common\\Lexer\\": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Guilherme Blanco",
+                    "email": "guilhermeblanco@gmail.com",
+                    "homepage": "http://www.instaclick.com"
+                },
+                {
+                    "name": "Roman Borschel",
+                    "email": "roman@code-factory.org"
+                },
+                {
+                    "name": "Johannes Schmitt",
+                    "email": "schmittjoh@gmail.com",
+                    "homepage": "http://jmsyst.com",
+                    "role": "Developer of wrapped JMSSerializerBundle"
+                }
+            ],
+            "description": "Base library for a lexer that can be used in Top-Down, Recursive Descent Parsers.",
+            "homepage": "http://www.doctrine-project.org",
+            "keywords": [
+                "lexer",
+                "parser"
+            ],
+            "time": "2013-01-12 18:59:04"
+        },
         {
             "name": "jakoch/phantomjs-installer",
             "version": "1.9.7",
@@ -95,25 +214,45 @@
         },
         {
             "name": "phmlabs/annovent",
-            "version": "0.1.0",
+            "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/phmLabs/Annovent",
-                "reference": "master"
+                "url": "https://github.com/phmLabs/Annovent.git",
+                "reference": "96cdfafa7be42e29be354a3b766b7fc559fb21ae"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/phmLabs/Annovent/archive/master.zip",
-                "reference": null,
-                "shasum": null
+                "url": "https://api.github.com/repos/phmLabs/Annovent/zipball/96cdfafa7be42e29be354a3b766b7fc559fb21ae",
+                "reference": "96cdfafa7be42e29be354a3b766b7fc559fb21ae",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/annotations": "~1.0.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~3.7.0"
             },
             "type": "library",
             "autoload": {
                 "psr-0": {
-                    "phmLabs\\": "",
-                    "Doctrine\\Common": ""
+                    "phmLabs\\": "src"
                 }
-            }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nils Langer",
+                    "email": "contact@phmlabs.com"
+                }
+            ],
+            "description": "Simple lightweight event dispatcher using annotations for registering listeners",
+            "support": {
+                "source": "https://github.com/phmLabs/Annovent/tree/master",
+                "issues": "https://github.com/phmLabs/Annovent/issues"
+            },
+            "time": "2014-03-26 04:37:28"
         },
         {
             "name": "symfony/console",
@@ -777,9 +916,9 @@
 
     ],
     "minimum-stability": "stable",
-    "stability-flags": [
-
-    ],
+    "stability-flags": {
+        "phmlabs/annovent": 20
+    },
     "platform": [
 
     ],
