@@ -86,7 +86,7 @@ class PhantomJSTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecute()
     {
-        $object = new PhantomJS('/citools/tools/common/phantomjs/1.9.7/bin/phantomjs');
+        $object = new PhantomJS('phantomjs');
         $this->assertNotNull($object->execute(array('--version')));
     }
 
