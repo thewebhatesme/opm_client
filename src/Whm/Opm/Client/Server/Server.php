@@ -73,19 +73,19 @@ class Server
     }
 
     /**
-     * addTaskMessurement
      *
-     * @param string $identifier
-     * @param \Whm\Opm\Client\Server\MessurementResult $result
+     * @param type $identifier
+     * @param type $result
      * @throws \DomainException
      */
-    public function addTaskMessurement($identifier, MessurementResult $result)
+    public function addTaskMessurement($identifier, $result)
     {
         $browser = $this->browser;
 
         $restApi = $this->host . '/add/' . $this->clientId . '/' . $identifier . '/';
 
-        $response = $browser->post($restApi, array(), $result->getMessurementRawData());
+        $response = $browser->post($restApi, array(), $result);
+        // $response = $browser->post($restApi, array(), ($httpArchive));
 
         if ($response->getStatusCode() != '200') {
             throw new \DomainException('Couldn\'t connect to server (url: ' . $restApi . ' | ' . $response->getStatusCode() . ' - ' . $response->getReasonPhrase() . ')');
