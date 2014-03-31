@@ -36,14 +36,13 @@ class Server
         return $messurementJob;
     }
 
-    public function addTaskMessurement ($identifier, $result)
+    public function addTaskMessurement ($identifier, MessurementResult $result)
     {
         $browser = $this->browser;
 
         $restApi = $this->host . '/add/' . $this->clientId . '/' . $identifier . '/';
 
-        $response = $browser->post($restApi, array(), $result);
-        // $response = $browser->post($restApi, array(), ($httpArchive));
+        $response = $browser->post($restApi, array(), $result->getMessurementRawData());
 
         if ($response->getStatusCode() != '200') {
             throw new \DomainException('Couldn\'t connect to server (url: ' . $restApi . ' | ' . $response->getStatusCode() . ' - ' . $response->getReasonPhrase() . ')');

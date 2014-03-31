@@ -49,7 +49,7 @@ class Config
      * @uses    \Symfony\Component\Yaml to parse YAML file and convert in PHP array
     *
      * @return  \Whm\Opm\Client\Config\Config
-     * 
+     *
      * @throws  \InvalidArgumentException
      * @throws  \ParseException
      */
@@ -76,7 +76,7 @@ class Config
     /**
      * @return string path to PhantomJS binary
      */
-    public function getPhantomExecutable()
+    public function getPhantomJsExecutable()
     {
         return $this->config['phantom']['executable'];
     }
